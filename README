@@ -1,0 +1,41 @@
+What is EzBuild?
+=========================
+
+EzBuild is a release building metatool used by reGen2 Linux that allows
+developers to synchronize Portage tree with Gentoo, as well as, to build
+custom reGen2 releases and templates. It is designed to interface with
+a package manager, so that users can easily build their own releases of
+reGen2 Linux or other Linux based operating systems.
+
+EzBuild is capable of:
+ * building installation stages
+ * building bootable LiveCD/DVD/USB
+ * building custom Portage trees
+
+From a developer perspective, you can view EzBuild as a complete redesign
+of Gentoo's Catalyst and Funtoo's Metro tools - deriving they strengths
+and addressing they weaknesses.
+
+
+Disclaimer
+=========================
+
+This software is covered by no warranty or guarantee of functionality. It
+is provided to the public for use in creating source-based distributions
+in a simple and reproducable manner. Use at your own risk!
+
+
+Requirements
+=========================
+
+ * app-arch/pbzip2 (multithreaded archiver)
+ * app-cdr/cdrtools (ISO9660 support)
+ * app-crypt/shash (digest support)
+ * app-misc/zisofs-tools (compressed ISO9660 support)
+ * app-shells/bash (interpreting shell scripts)
+ * dev-lang/python (interpreting python scripts)
+ * dev-vcs/cvs (CVS repository support)
+ * dev-vcs/git (GIT repository support)
+ * dev-vcs/mercurial (HG repository support)
+ * dev-vcs/subversion (SVN repository support)
+ * sys-fs/squashfs-tools (SquashFS support)
