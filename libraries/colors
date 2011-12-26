@@ -21,9 +21,14 @@ COLOR_WHITE="\033[37m"
 #-------------------------------------------------------------------------------
 # Special Element Definitions
 #-------------------------------------------------------------------------------
-ARROW_LEFT="${BOLD}${YELLOW}<${NORMAL}${WHITE}"
-ARROW_RIGHT="${BOLD}${YELLOW}>${NORMAL}${WHITE}"
+ARROW_LEFT="${COLOR_BOLD}${COLOR_YELLOW}<${COLOR_NORMAL}${COLOR_WHITE}"
+ARROW_RIGHT="${COLOR_BOLD}${COLOR_YELLOW}>${COLOR_NORMAL}${COLOR_WHITE}"
 
-BORDER_DD="${BOLD}================================================================================${NORMAL}"
-BORDER_SD="${BOLD}--------------------------------------------------------------------------------${NORMAL}"
-BORDER_STAR="${BOLD}********************************************************************************${NORMAL}"
+BORDER_DD="${COLOR_BOLD}================================================================================${COLOR_NORMAL}"
+BORDER_SD="${COLOR_BOLD}--------------------------------------------------------------------------------${COLOR_NORMAL}"
+BORDER_STAR="${COLOR_BOLD}********************************************************************************${COLOR_NORMAL}"
+
+STAR_BLUE="${COLOR_BOLD}${COLOR_BLUE}*${COLOR_NORMAL}${COLOR_WHITE}"
+STAR_GREEN="${COLOR_BOLD}${COLOR_GREEN}*${COLOR_NORMAL}${COLOR_WHITE}"
+STAR_RED="${COLOR_BOLD}${COLOR_RED}*${COLOR_NORMAL}${COLOR_WHITE}"
+STAR_YELLOW="${COLOR_BOLD}${COLOR_YELLOW}*${COLOR_NORMAL}${COLOR_WHITE}"
