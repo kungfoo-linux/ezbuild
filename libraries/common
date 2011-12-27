@@ -1,0 +1,75 @@
+#!/bin/bash
+
+#-------------------------------------------------------------------------------
+# Checks whether a supplied variable is defined or not
+# Parameters: %variable%
+#-------------------------------------------------------------------------------
+function isDefined() {
+	[[ ${!1-X} == ${!1-Y} ]]
+}
+
+#-------------------------------------------------------------------------------
+# Checks whether a supplied variable is enabled or not
+# Parameters: %variable%
+#-------------------------------------------------------------------------------
+function isEnabled() {
+	case "${1}" in
+		[Ee][Nn][Aa][Bb][Ll][Ee][Dd])
+			return 0
+			;;
+		[Tt][Rr][Uu][Ee])
+			return 0
+			;;
+		[Yy][Ee][Ss])
+			return 0
+			;;
+		1)
+			return 0
+			;;
+	esac
+	return 1
+}
+
+#-------------------------------------------------------------------------------
+# Checks whether a variable is defined and if value's length > 0
+# Parameters: %variable%
+#-------------------------------------------------------------------------------
+function isSet() {
+	if isDefined ${1}; then
+		if [[ -n ${!1} ]]; then
+			return 0
+		fi
+	fi
+	return 1
+}
+
+#-------------------------------------------------------------------------------
+# Returns a UNIX timestamp
+#-------------------------------------------------------------------------------
+function timestamp() {
+	echo $(date +%s)
+}
+
+#-------------------------------------------------------------------------------
+# Returns lowercase string
+# Parameters: %string%
+#-------------------------------------------------------------------------------
+function toLower() {
+	echo "${@}" | tr '[:upper:]' '[:lower:]'
+}
+
+#-------------------------------------------------------------------------------
+# Returns uppercase string
+# Parameters: %string%
+#-------------------------------------------------------------------------------
+function toUpper() {
+	echo "${@}" | tr '[:lower:]' '[:upper:]'
+}
+
+#-------------------------------------------------------------------------------
+# Returns only the first part of a string, delimited by tabs or spaces
+# Parameters: %string%
+#-------------------------------------------------------------------------------
+function trim() {
+	echo ${1}
+}

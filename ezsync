@@ -1,1 +1,4 @@
 #!/bin/bash
+
+EZNAME=$(basename ${0})
+EZROOT=$(dirname $(readlink -ne ${0}))
