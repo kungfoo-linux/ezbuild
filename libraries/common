@@ -44,6 +44,23 @@ function isSet() {
 }
 
 #-------------------------------------------------------------------------------
+# Loads EzBuild configuration
+#-------------------------------------------------------------------------------
+function loadConfiguration() {
+	source ${EZROOT}/config/${EZNAME}.conf
+	source ${EZROOT}/config/layout.conf
+	source /etc/ezbuild/${EZNAME}.conf
+	source /etc/ezbuild/layout.conf
+}
+
+#-------------------------------------------------------------------------------
+# Loads all EzBuild Libraries
+#-------------------------------------------------------------------------------
+function loadLibraries() {
+	source ${EZROOT}/libraries/colors
+}
+
+#-------------------------------------------------------------------------------
 # Returns a UNIX timestamp
 #-------------------------------------------------------------------------------
 function timestamp() {
