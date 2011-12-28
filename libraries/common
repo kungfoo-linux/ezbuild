@@ -47,25 +47,25 @@ function isSet() {
 # Loads EzBuild configuration
 #-------------------------------------------------------------------------------
 function loadConfiguration() {
-	source ${EZROOT}/config/${EZNAME}.conf &> /dev/null || panic "Unable to load configuration files!\nYour EzBuild installation seems to be broken..."
-	source ${EZROOT}/config/layout.conf &> /dev/null || panic "Unable to load configuration files!\nYour EzBuild installation seems to be broken..."
-	source /etc/ezbuild/${EZNAME}.conf &> /dev/null || panic "Unable to load configuration files!\nYour EzBuild installation seems to be broken..."
-	source /etc/ezbuild/layout.conf &> /dev/null || panic "Unable to load configuration files!\nYour EzBuild installation seems to be broken..."
+	source ${EZROOT}/config/${EZNAME}.conf &> /dev/null || panic
+	source ${EZROOT}/config/layout.conf &> /dev/null || panic
+	source /etc/ezbuild/${EZNAME}.conf &> /dev/null || panic
+	source /etc/ezbuild/layout.conf &> /dev/null || panic
 }
 
 #-------------------------------------------------------------------------------
 # Loads all EzBuild Libraries
 #-------------------------------------------------------------------------------
 function loadLibraries() {
-	source ${EZROOT}/libraries/colors &> /dev/null || panic "Unable to load necessary libraries!\nYour EzBuild installation seems to be broken..."
+	source ${EZROOT}/libraries/colors &> /dev/null || panic
 }
 
 #-------------------------------------------------------------------------------
 # Outputs error message and aborts program execution
-# Parameters: %message%
 #-------------------------------------------------------------------------------
 function panic() {
-	echo -e "FATAL ERROR: ${@}"
+	echo -e "FATAL ERROR: Unable to load necessary files!"
+	echo -e "Your EzBuild installation seems to be broken..."
 	exit 1
 }
 
