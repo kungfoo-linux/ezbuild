@@ -47,17 +47,26 @@ function isSet() {
 # Loads EzBuild configuration
 #-------------------------------------------------------------------------------
 function loadConfiguration() {
-	source ${EZROOT}/config/${EZNAME}.conf
-	source ${EZROOT}/config/layout.conf
-	source /etc/ezbuild/${EZNAME}.conf
-	source /etc/ezbuild/layout.conf
+	source ${EZROOT}/config/${EZNAME}.conf &> /dev/null || panic "Unable to load configuration files!\nYour EzBuild installation seems to be broken..."
+	source ${EZROOT}/config/layout.conf &> /dev/null || panic "Unable to load configuration files!\nYour EzBuild installation seems to be broken..."
+	source /etc/ezbuild/${EZNAME}.conf &> /dev/null || panic "Unable to load configuration files!\nYour EzBuild installation seems to be broken..."
+	source /etc/ezbuild/layout.conf &> /dev/null || panic "Unable to load configuration files!\nYour EzBuild installation seems to be broken..."
 }
 
 #-------------------------------------------------------------------------------
 # Loads all EzBuild Libraries
 #-------------------------------------------------------------------------------
 function loadLibraries() {
-	source ${EZROOT}/libraries/colors
+	source ${EZROOT}/libraries/colors &> /dev/null || panic "Unable to load necessary libraries!\nYour EzBuild installation seems to be broken..."
+}
+
+#-------------------------------------------------------------------------------
+# Outputs error message and aborts program execution
+# Parameters: %message%
+#-------------------------------------------------------------------------------
+function panic() {
+	echo -e "FATAL ERROR: ${@}"
+	exit 1
 }
 
 #-------------------------------------------------------------------------------
