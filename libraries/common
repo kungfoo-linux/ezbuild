@@ -64,12 +64,78 @@ function loadLibraries() {
 }
 
 #-------------------------------------------------------------------------------
+# Saves specified message into a log file
+# Parameters: %message% %level%
+#-------------------------------------------------------------------------------
+function logMessage() {
+	if isEnabled ${LOGGING}; then
+		MESSAGE="${1}"
+		TYPE="${2}"
+		DATE=$(date +"${LOGDATEFORMAT}")
+		if [ -z ${TYPE} ]; then
+			TYPE="  -  "
+		fi
+		echo -e "[${DATE}][${TYPE}] ${MESSAGE}" >> ${LOGFILE}
+	fi
+}
+
+#-------------------------------------------------------------------------------
+# Saves executed command multiline output into a log file
+# Parameters: %command_output%
+#-------------------------------------------------------------------------------
+function logOutput() {
+	if isEnabled ${LOGGING}; then
+		echo -e "${@}" | awk '{ print "   )> ", $0; }' >> ${LOGFILE}
+	fi
+}
+
+#-------------------------------------------------------------------------------
 # Outputs error message and aborts program execution
 #-------------------------------------------------------------------------------
 function panic() {
 	echo -e "FATAL ERROR: Unable to load necessary files!"
 	echo -e "Your EzBuild installation seems to be broken..."
 	exit 1
+}
+
+#-------------------------------------------------------------------------------
+# Outputs formatted error message to both display and log file
+# Parameters: %message%
+#-------------------------------------------------------------------------------
+function printError() {
+	logMessage "${1}" "ERROR"
+	echo -e " ${MESSAGE_ERROR} ${@}"
+}
+
+#-------------------------------------------------------------------------------
+# Outputs formatted information to both display and log file
+# Parameters: %message%
+#-------------------------------------------------------------------------------
+function printInfo() {
+	logMessage "${1}" "INFO"
+	echo -e " ${MESSAGE_INFO} ${@}"
+}
+
+#-------------------------------------------------------------------------------
+# Outputs formatted warning to both display and log file
+# Parameters: %message%
+#-------------------------------------------------------------------------------
+function printWarn() {
+	logMessage "${1}" "WARN"
+	echo -e " ${MESSAGE_WARN} ${@}"
+}
+
+#-------------------------------------------------------------------------------
+# Silently executes given command and saves its output to log file if enabled
+# Parameters: %command%
+#-------------------------------------------------------------------------------
+function run() {
+	COMMAND="${1}"
+	logMessage "Executing: \"${COMMAND}\"" "DEBUG"
+	OUTPUT=$(${COMMAND} 2>&1)
+	RESULT=${?}
+	logOutput "${OUTPUT}"
+	return ${RESULT}
 }
 
 #-------------------------------------------------------------------------------
