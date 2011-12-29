@@ -69,11 +69,11 @@ function loadLibraries() {
 #-------------------------------------------------------------------------------
 function logMessage() {
 	if isEnabled ${LOGGING}; then
-		MESSAGE="${1}"
-		TYPE="${2}"
-		DATE=$(date +"${LOGDATEFORMAT}")
+		local MESSAGE="${1}"
+		local TYPE="${2}"
+		local DATE=$(date +"${LOGDATEFORMAT}")
 		if [ -z ${TYPE} ]; then
-			TYPE="  -  "
+			local TYPE="  -  "
 		fi
 		echo -e "[${DATE}][${TYPE}] ${MESSAGE}" >> ${LOGFILE}
 	fi
@@ -130,10 +130,10 @@ function printWarn() {
 # Parameters: %command%
 #-------------------------------------------------------------------------------
 function run() {
-	COMMAND="${1}"
+	local COMMAND="${1}"
 	logMessage "Executing: \"${COMMAND}\"" "DEBUG"
-	OUTPUT=$(${COMMAND} 2>&1)
-	RESULT=${?}
+	local OUTPUT=$(${COMMAND} 2>&1)
+	local RESULT=${?}
 	logOutput "${OUTPUT}"
 	return ${RESULT}
 }
