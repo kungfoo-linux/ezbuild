@@ -1,4 +1,7 @@
 #!/bin/bash
+# Copyright 2010-2011, Asio Software Technologies
+# Distributed under the terms of the GNU General Public License v3
+
 
 EZNAME=$(basename ${0})
 EZROOT=$(dirname $(readlink -ne ${0}))
