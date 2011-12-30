@@ -126,6 +126,18 @@ function printWarn() {
 }
 
 #-------------------------------------------------------------------------------
+# Restores original Internal Field Separator (IFS)
+#-------------------------------------------------------------------------------
+function restoreIFS() {
+	if [ "${ORGIFS:-unset}" != "unset" ]; then
+		IFS="${ORGIFS}"
+		unset ORGIFS
+	else
+		unset IFS
+	fi
+}
+
+#-------------------------------------------------------------------------------
 # Silently executes given command and saves its output to log file if enabled
 # Parameters: %command%
 #-------------------------------------------------------------------------------
@@ -136,6 +148,20 @@ function run() {
 	local RESULT=${?}
 	logOutput "${OUTPUT}"
 	return ${RESULT}
+}
+
+#-------------------------------------------------------------------------------
+# Saves original Internal Field Separator (IFS) and optionally sets new value
+# Parameters: %new_ifs%
+#-------------------------------------------------------------------------------
+function saveIFS() {
+	if [ "${IFS:-unset}" != "unset" ]; then
+		ORGIFS="${IFS}"
+	fi
+	local NEWIFS="${1}"
+	if isSet NEWIFS; then
+		IFS="${NEWIFS}"
+	fi
 }
 
 #-------------------------------------------------------------------------------
