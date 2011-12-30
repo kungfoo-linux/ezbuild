@@ -4,6 +4,21 @@
 
 
 #-------------------------------------------------------------------------------
+# Outputs formatted error message and aborts script execution with given code
+# Parameters: %message% %code%
+#-------------------------------------------------------------------------------
+function die() {
+	if isEnabled ${LOGGING} && isSet NOTIFY; then
+		local LOGS="Full output from logs:\n\n$(cat ${LOGFILE})"
+		local MESG="The ${EZNAME} has failed with code: ${2} and message: ${1}"
+		local TOPIC="The ${EZNAME} process has failed!"
+		echo -e "${MESG}\n${LOGS}" | mailx -s "${TOPIC}" "${NOTIFY}"
+	fi
+	printError "${1}"
+	exit ${2}
+}
+
+#-------------------------------------------------------------------------------
 # Checks whether a supplied variable is defined or not
 # Parameters: %variable%
 #-------------------------------------------------------------------------------
