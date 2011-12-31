@@ -4,6 +4,37 @@
 
 
 #-------------------------------------------------------------------------------
+# Tests for a minimum version level by comparing version numbers
+# Parameters: %min_version% %test_version%
+#-------------------------------------------------------------------------------
+function checkVersion() {
+	local REF="${1}"
+	local TST="${2}"
+	saveIFS ".-(pa"
+	set -- ${REF}
+	local REF_MAJOR=${1}
+	local REF_MINOR=${2}
+	local REF_PATCH=${3}
+	set -- ${TST}
+	local TST_MAJOR=${1}
+	local TST_MINOR=${2}
+	local TST_PATCH=${3}
+	restoreIFS
+	if [[ ${TST_MAJOR} -gt ${REF_MAJOR} ]]; then
+		return 0
+	elif [[ ${TST_MAJOR} -eq ${REF_MAJOR} ]]; then
+		if [[ ${TST_MINOR} -gt ${REF_MINOR} ]]; then
+			return 0
+		elif [[ ${TST_MINOR} -eq ${REF_MINOR} ]]; then
+			if [[ ${TST_PATCH} -ge ${REF_PATCH} ]]; then
+				return 0
+			fi
+		fi
+	fi
+	return 1
+}
+
+#-------------------------------------------------------------------------------
 # Outputs formatted error message and aborts script execution with given code
 # Parameters: %message% %code%
 #-------------------------------------------------------------------------------
