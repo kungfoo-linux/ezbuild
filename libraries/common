@@ -8,29 +8,12 @@
 # Parameters: %min_version% %test_version%
 #-------------------------------------------------------------------------------
 function checkVersion() {
-	local REF="${1}"
-	local TST="${2}"
-	saveIFS ".-(pa"
-	set -- ${REF}
-	local REF_MAJOR=${1}
-	local REF_MINOR=${2}
-	local REF_PATCH=${3}
-	set -- ${TST}
-	local TST_MAJOR=${1}
-	local TST_MINOR=${2}
-	local TST_PATCH=${3}
-	restoreIFS
-	if [[ ${TST_MAJOR} -gt ${REF_MAJOR} ]]; then
-		return 0
-	elif [[ ${TST_MAJOR} -eq ${REF_MAJOR} ]]; then
-		if [[ ${TST_MINOR} -gt ${REF_MINOR} ]]; then
-			return 0
-		elif [[ ${TST_MINOR} -eq ${REF_MINOR} ]]; then
-			if [[ ${TST_PATCH} -ge ${REF_PATCH} ]]; then
-				return 0
-			fi
-		fi
-	fi
+	local REF=$(echo "${1}" | \
+		sed -u -e "s/-r/_z/g" -e "s/_p/_z/g" -e "s/_zre/_pre/" -e "s/$/_z0/")
+	local TST=$(echo "${2}" | \
+		sed -u -e "s/-r/_z/g" -e "s/_p/_z/g" -e "s/_zre/_pre/" -e "s/$/_z0/")
+	local BEST=$(echo -e "${REF}\n${TST}" | sed "/^$/d" | sort -Vr | head -1)
+	[[ "${BEST}" = "${TST}" ]] && return 0
 	return 1
 }
 
