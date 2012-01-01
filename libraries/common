@@ -33,6 +33,20 @@ function die() {
 }
 
 #-------------------------------------------------------------------------------
+# Checks whether a defined variable contain specified element or not
+# Parameters: %variable% %element%
+#-------------------------------------------------------------------------------
+function hasElement() {
+	local NEEDLE=${1}
+	shift
+	local X
+	for X in "${@}"; do
+		[ "${X}" = "${NEEDLE}" ] && return 0
+	done
+	return 1
+}
+
+#-------------------------------------------------------------------------------
 # Checks whether a supplied variable is defined or not
 # Parameters: %variable%
 #-------------------------------------------------------------------------------
