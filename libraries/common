@@ -104,6 +104,7 @@ function loadConfiguration() {
 #-------------------------------------------------------------------------------
 function loadLibraries() {
 	source ${EZROOT}/libraries/colors &> /dev/null || panic
+	source ${EZROOT}/libraries/filesystem &> /dev/null || panic
 }
 
 #-------------------------------------------------------------------------------
