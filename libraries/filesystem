@@ -23,7 +23,7 @@ function download() {
 		awk '{printf("\b\b\b\b%4s", $2)}'
 	RESULT=${PIPESTATUS[0]}
 	echo -ne "\b\b\b\b"
-	if [[ ${RESULT} -ne 0 ]]; then
+	if [ ${RESULT} -ne 0 ]; then
 		logOutput "Unable to download ${URL}! Exit code: ${RESULT}"
 		echo -e "${COLOR_RED}${COLOR_BOLD}ERROR${COLOR_WHITE}${COLOR_NORMAL}"
 	else
@@ -56,7 +56,7 @@ function makeLink() {
 	[[ ! -d ${DESTDIR} ]] && makeDirectory "${DESTDIR}"
 	OUTPUT=$(ln -sfn "${1}" "${2}" 2>&1)
 	RESULT=${?}
-	if [[ ${RESULT} -ne 0 ]]; then
+	if [ ${RESULT} -ne 0 ]; then
 		logOutput "${OUTPUT}"
 	fi
 	return ${RESULT}
