@@ -8,8 +8,8 @@
 # Parameters: %directory%
 #-------------------------------------------------------------------------------
 function makeDirectory() {
-	OUTPUT=$(install -d "${@}" 2>&1)
-	RESULT=${?}
+	local OUTPUT=$(install -d "${@}" 2>&1)
+	local RESULT=${?}
 	if [[ ${RESULT} -ne 0 ]]; then
 		logOutput "${OUTPUT}"
 	fi
@@ -21,10 +21,10 @@ function makeDirectory() {
 # Parameters: %source% %target%
 #-------------------------------------------------------------------------------
 function makeLink() {
-	DESTDIR="${2%/*}"
+	local DESTDIR="${2%/*}"
 	[[ ! -d ${DESTDIR} ]] && makeDirectory "${DESTDIR}"
-	OUTPUT=$(ln -sfn "${1}" "${2}" 2>&1)
-	RESULT=${?}
+	local OUTPUT=$(ln -sfn "${1}" "${2}" 2>&1)
+	local RESULT=${?}
 	if [[ ${RESULT} -ne 0 ]]; then
 		logOutput "${OUTPUT}"
 	fi
