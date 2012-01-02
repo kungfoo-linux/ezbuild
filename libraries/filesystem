@@ -17,6 +17,7 @@ function download() {
 	else
 		DEST="./${FILENAME}"
 	fi
+	logMessage "Downloading ${URL} to ${DEST}" "DEBUG"
 	echo -ne "   ${STAR_GREEN} ${FILENAME}:     "
 	wget --progress=dot -c -t ${FETCHTRIES} -T ${FETCHTIMEOUT} -O "${DEST}" \
 		${URL} 2>&1 | grep --line-buffered "%" | sed -u -e "s/[\.\,]//g" | \
