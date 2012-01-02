@@ -4,6 +4,34 @@
 
 
 #-------------------------------------------------------------------------------
+# Downloads files into specified or current directory
+# Parameters: %url% %directory%
+#-------------------------------------------------------------------------------
+function download() {
+	local DEST="${2}"
+	local FILENAME="${1##*/}"
+	local URL="${1}"
+	if isSet DEST; then
+		local DEST="${DEST}/${FILENAME}"
+	else
+		local DEST="./${FILENAME}"
+	fi
+	echo -ne "   ${STAR_GREEN} ${FILENAME}:     "
+	wget --progress=dot -c -t ${FETCHTRIES} -T ${FETCHTIMEOUT} -O "${DEST}" \
+		${URL} 2>&1 | grep --line-buffered "%" | sed -u -e "s/[\.\,]//g" | \
+		awk '{printf("\b\b\b\b%4s", $2)}'
+	local RESULT=${PIPESTATUS[0]}
+	echo -ne "\b\b\b\b"
+	if [[ ${RESULT} -ne 0 ]]; then
+		logOutput "Unable to download ${URL}! Exit code: ${RESULT}"
+		echo -e "${COLOR_RED}${COLOR_BOLD}ERROR${COLOR_WHITE}${COLOR_NORMAL}"
+	else
+		echo -e "${COLOR_GREEN}${COLOR_BOLD}DONE${COLOR_WHITE}${COLOR_NORMAL}"
+	fi
+	return ${RESULT}
+}
+
+#-------------------------------------------------------------------------------
 # Creates all components of the specified directories
 # Parameters: %directory%
 #-------------------------------------------------------------------------------
