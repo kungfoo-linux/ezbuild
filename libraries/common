@@ -8,11 +8,12 @@
 # Parameters: %min_version% %test_version%
 #-------------------------------------------------------------------------------
 function checkVersion() {
-	local REF=$(echo "${1}" | \
+	local BEST REF TST
+	REF=$(echo "${1}" | \
 		sed -u -e "s/-r/_z/g" -e "s/_p/_z/g" -e "s/_zre/_pre/" -e "s/$/_z0/")
-	local TST=$(echo "${2}" | \
+	TST=$(echo "${2}" | \
 		sed -u -e "s/-r/_z/g" -e "s/_p/_z/g" -e "s/_zre/_pre/" -e "s/$/_z0/")
-	local BEST=$(echo -e "${REF}\n${TST}" | sed "/^$/d" | sort -Vr | head -1)
+	BEST=$(echo -e "${REF}\n${TST}" | sed "/^$/d" | sort -Vr | head -1)
 	[[ "${BEST}" = "${TST}" ]] && return 0
 	return 1
 }
@@ -112,12 +113,13 @@ function loadLibraries() {
 # Parameters: %message% %level%
 #-------------------------------------------------------------------------------
 function logMessage() {
+	local DATE MESSAGE TYPE
 	if isEnabled ${LOGGING}; then
-		local MESSAGE="${1}"
-		local TYPE="${2}"
-		local DATE=$(date +"${LOGDATEFORMAT}")
+		MESSAGE="${1}"
+		TYPE="${2}"
+		DATE=$(date +"${LOGDATEFORMAT}")
 		if [ -z ${TYPE} ]; then
-			local TYPE="  -  "
+			TYPE="  -  "
 		fi
 		echo -e "[${DATE}][${TYPE}] ${MESSAGE}" >> ${LOGFILE}
 	fi
@@ -186,10 +188,11 @@ function restoreIFS() {
 # Parameters: %command%
 #-------------------------------------------------------------------------------
 function run() {
-	local COMMAND="${1}"
+	local COMMAND OUTPUT RESULT
+	COMMAND="${1}"
 	logMessage "Executing: \"${COMMAND}\"" "DEBUG"
-	local OUTPUT=$(${COMMAND} 2>&1)
-	local RESULT=${?}
+	OUTPUT=$(${COMMAND} 2>&1)
+	RESULT=${?}
 	logOutput "${OUTPUT}"
 	return ${RESULT}
 }
@@ -199,10 +202,11 @@ function run() {
 # Parameters: %new_ifs%
 #-------------------------------------------------------------------------------
 function saveIFS() {
+	local NEWIFS
 	if [ "${IFS:-unset}" != "unset" ]; then
 		ORGIFS="${IFS}"
 	fi
-	local NEWIFS="${1}"
+	NEWIFS="${1}"
 	if isSet NEWIFS; then
 		IFS="${NEWIFS}"
 	fi
