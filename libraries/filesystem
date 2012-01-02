@@ -8,19 +8,20 @@
 # Parameters: %url% %directory%
 #-------------------------------------------------------------------------------
 function download() {
-	local DEST="${2}"
-	local FILENAME="${1##*/}"
-	local URL="${1}"
+	local DEST FILENAME RESULT URL
+	DEST="${2}"
+	FILENAME="${1##*/}"
+	URL="${1}"
 	if isSet DEST; then
-		local DEST="${DEST}/${FILENAME}"
+		DEST="${DEST}/${FILENAME}"
 	else
-		local DEST="./${FILENAME}"
+		DEST="./${FILENAME}"
 	fi
 	echo -ne "   ${STAR_GREEN} ${FILENAME}:     "
 	wget --progress=dot -c -t ${FETCHTRIES} -T ${FETCHTIMEOUT} -O "${DEST}" \
 		${URL} 2>&1 | grep --line-buffered "%" | sed -u -e "s/[\.\,]//g" | \
 		awk '{printf("\b\b\b\b%4s", $2)}'
-	local RESULT=${PIPESTATUS[0]}
+	RESULT=${PIPESTATUS[0]}
 	echo -ne "\b\b\b\b"
 	if [[ ${RESULT} -ne 0 ]]; then
 		logOutput "Unable to download ${URL}! Exit code: ${RESULT}"
@@ -36,9 +37,10 @@ function download() {
 # Parameters: %directory%
 #-------------------------------------------------------------------------------
 function makeDirectory() {
-	local OUTPUT=$(install -d "${@}" 2>&1)
-	local RESULT=${?}
-	if [[ ${RESULT} -ne 0 ]]; then
+	local OUTPUT RESULT
+	OUTPUT=$(install -d "${@}" 2>&1)
+	RESULT=${?}
+	if [ ${RESULT} -ne 0 ]; then
 		logOutput "${OUTPUT}"
 	fi
 	return ${RESULT}
@@ -49,10 +51,11 @@ function makeDirectory() {
 # Parameters: %source% %target%
 #-------------------------------------------------------------------------------
 function makeLink() {
-	local DESTDIR="${2%/*}"
+	local DESTDIR OUTPUT RESULT
+	DESTDIR="${2%/*}"
 	[[ ! -d ${DESTDIR} ]] && makeDirectory "${DESTDIR}"
-	local OUTPUT=$(ln -sfn "${1}" "${2}" 2>&1)
-	local RESULT=${?}
+	OUTPUT=$(ln -sfn "${1}" "${2}" 2>&1)
+	RESULT=${?}
 	if [[ ${RESULT} -ne 0 ]]; then
 		logOutput "${OUTPUT}"
 	fi
