@@ -1,0 +1,32 @@
+#!/bin/bash
+# Copyright 2010-2011, Asio Software Technologies
+# Distributed under the terms of the GNU General Public License v3
+
+
+#-------------------------------------------------------------------------------
+# Creates all components of the specified directories
+# Parameters: %directory%
+#-------------------------------------------------------------------------------
+function makeDirectory() {
+	OUTPUT=$(install -d "${@}" 2>&1)
+	RESULT=${?}
+	if [[ ${RESULT} -ne 0 ]]; then
+		logOutput "${OUTPUT}"
+	fi
+	return ${RESULT}
+}
+
+#-------------------------------------------------------------------------------
+# Creates a symbolic link between to files in specified target directory
+# Parameters: %source% %target%
+#-------------------------------------------------------------------------------
+function makeLink() {
+	DESTDIR="${2%/*}"
+	[[ ! -d ${DESTDIR} ]] && makeDirectory "${DESTDIR}"
+	OUTPUT=$(ln -sfn "${1}" "${2}" 2>&1)
+	RESULT=${?}
+	if [[ ${RESULT} -ne 0 ]]; then
+		logOutput "${OUTPUT}"
+	fi
+	return ${RESULT}
+}
