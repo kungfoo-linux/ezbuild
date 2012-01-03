@@ -132,7 +132,7 @@ function loadConfiguration() {
 # Loads all EzBuild Libraries
 #-------------------------------------------------------------------------------
 function loadLibraries() {
-	source ${EZROOT}/libraries/colors &> /dev/null || panic
+	source ${EZROOT}/libraries/constants &> /dev/null || panic
 	source ${EZROOT}/libraries/filesystem &> /dev/null || panic
 }
 
