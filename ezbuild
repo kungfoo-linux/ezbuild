@@ -15,6 +15,9 @@ source ${EZROOT}/libraries/common
 loadLibraries
 loadConfiguration
 
+# Print EzBuild notice
+printNotice
+
 # Check system requirements
 printInfo "Checking system prerequisites..."
 checkPrerequisites

@@ -58,6 +58,7 @@ function die() {
 		echo -e "${MESG}\n${LOGS}" | mailx -s "${TOPIC}" "${NOTIFY}"
 	fi
 	printError "${1}"
+	echo -ne "\n"
 	exit ${2}
 }
 
@@ -191,12 +192,26 @@ function printInfo() {
 }
 
 #-------------------------------------------------------------------------------
+# Outputs formatted information about EzBuild version and copyrights
+#-------------------------------------------------------------------------------
+function printNotice() {
+	echo -e "\n${COLOR_BOLD}EzBuild v${EZVERSION} (${EZNAME} launched)"
+	echo -e "${EZCOPYRIGHT}${COLOR_NORMAL}"
+	echo -e "${BORDER_STAR}\n"
+}
+
+#-------------------------------------------------------------------------------
 # Outputs formatted warning to both display and log file
 # Parameters: %message%
 #-------------------------------------------------------------------------------
 function printWarn() {
 	logMessage "${1}" "WARN"
 	echo -e " ${MESSAGE_WARN} ${@}"
+}
+
+function quit() {
+	echo -e "${COLOR_BOLD}ALL DONE!\n${COLOR_NORMAL}"
+	exit 0
 }
 
 #-------------------------------------------------------------------------------
