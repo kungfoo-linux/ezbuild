@@ -3,5 +3,14 @@
 # Distributed under the terms of the GNU General Public License v3
 
 
+# Declare basic system variables
 EZNAME=$(basename ${0})
 EZROOT=$(dirname $(readlink -ne ${0}))
+
+# Load necessary files
+source /etc/profile
+source ${EZROOT}/libraries/common
+
+# Load EzBuild libraries & configuration
+loadLibraries
+loadConfiguration
