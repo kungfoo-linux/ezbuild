@@ -62,3 +62,39 @@ function makeLink() {
 	fi
 	return ${RESULT}
 }
+
+#-------------------------------------------------------------------------------
+# Extracts any tar based archive into specified directory
+# Parameters: %tarball% %destination%
+#-------------------------------------------------------------------------------
+function unpack() {
+	local DST EXT OUTPUT RESULT SRC
+	SRC="${1}"
+	DST="${2}"
+	EXT=$(toLower "${SRC##*.}")
+	if [ ! -d ${DST} ]; then
+		makeDirectory ${DST} || return 1
+	fi
+	case "${EXT}" in
+		bz2)
+			if [ -e /usr/bin/pbzip2 ]; then
+				OUTPUT=$(pbzip2 -dc "${SRC}" 2>&1 | tar xpf - -C "${DST}" 2>&1)
+			else
+				OUTPUT=$(tar xjpf "${SRC}" -C "${DST}" 2>&1)
+			fi
+			RESULT=${?}
+			;;
+		gz|xz|z)
+			OUTPUT=$(tar xpf "${SRC}" -C "${DST}" 2>&1)
+			RESULT=${?}
+			;;
+		*)
+			OUTPUT="Unrecognized source compression for ${SRC}"
+			RESULT=1
+			;;
+	esac
+	if [ ${RESULT} -ne 0 ]; then
+		logOutput "${OUTPUT}"
+	fi
+	return ${RESULT}
+}
