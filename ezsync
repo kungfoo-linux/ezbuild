@@ -1,0 +1,24 @@
+#!/bin/bash
+# Copyright 2010-2012, Asio Software Technologies
+# Distributed under the terms of the GNU General Public License v3
+
+
+# Declare basic system variables
+EZNAME=$(basename ${0})
+EZROOT=$(dirname $(readlink -ne ${0}))
+
+# Load necessary files
+source /etc/profile
+source ${EZROOT}/libraries/common
+
+# Load EzBuild libraries & configuration
+loadLibraries
+loadConfiguration
+
+# Print EzBuild notice and parse arguments
+printNotice
+
+# Check system requirements
+printInfo "Checking system prerequisites..."
+checkPrerequisites
+[ ${?} -ne 0 ] && die "Your environment does not meet EzBuild requirements"
