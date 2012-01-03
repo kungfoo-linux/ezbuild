@@ -4,6 +4,34 @@
 
 
 #-------------------------------------------------------------------------------
+# Checks if system running EzBuild meets its requirements
+#-------------------------------------------------------------------------------
+function checkPrerequisites() {
+	if [ "$(uname -s)" != "Linux" ]; then
+		printError "You are trying to launch ${EZNAME} on non-Linux system!"
+		return 1
+	fi
+	if [ "${EUID}" != "0" ] && [ "${USER}" != "root" ]; then
+		printError "The ${EZNAME} needs to be launched from root account!"
+		return 1
+	fi
+	if [ ! -e /dev/null ]; then
+		printError "The /dev directory seems to be not mounted!"
+		return 1
+	fi
+	if [ ! -e /proc/mounts ]; then
+		printError "The /proc directory seems to be not mounted!"
+		return 1
+	fi
+	ping -c 1 google.com &> /dev/null
+	if [ ${?} -ne 0 ]; then
+		printError "There seems to be no Internet conectivity!"
+		return 1
+	fi
+	return 0
+}
+
+#-------------------------------------------------------------------------------
 # Tests for a minimum version level by comparing version numbers
 # Parameters: %min_version% %test_version%
 #-------------------------------------------------------------------------------

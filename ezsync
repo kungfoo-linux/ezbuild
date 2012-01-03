@@ -14,3 +14,8 @@ source ${EZROOT}/libraries/common
 # Load EzBuild libraries & configuration
 loadLibraries
 loadConfiguration
+
+# Check system requirements
+printInfo "Checking system prerequisites..."
+checkPrerequisites
+[ ${?} -ne 0 ] && die "Your environment does not meet EzBuild requirements"
