@@ -24,7 +24,7 @@ until [[ -z "${1}" ]]; do
 			cleanLogs
 			;;
 		-h|--help)
-			printEzsyncUsage
+			showEzsyncUsage
 			;;
 		-p|--purge)
 			printInfo "Clearing temp directory..."
