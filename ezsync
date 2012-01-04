@@ -15,6 +15,14 @@ source ${EZROOT}/libraries/common
 loadLibraries
 loadConfiguration
 
+# Do not allow more than one working copy
+PID=$(pidof -s -o '%PPID' -x ${EZNAME})
+if [ ${PID} ]; then
+	printWarn "The ${EZNAME} is already working with PID: ${PID}"
+	printWarn "You cannot have more than one instancies running"
+	exit 0
+fi
+
 # Print EzBuild notice and parse arguments
 printNotice
 until [[ -z "${1}" ]]; do
