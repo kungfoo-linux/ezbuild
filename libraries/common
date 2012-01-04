@@ -150,7 +150,7 @@ function logMessage() {
 		if [ -z ${TYPE} ]; then
 			TYPE="  -  "
 		fi
-		echo -e "[${DATE}][${TYPE}] ${MESSAGE}" >> ${LOGFILE}
+		{ echo -e "[${DATE}][${TYPE}] ${MESSAGE}" >> ${LOGFILE}; } 2> /dev/null
 	fi
 }
 
