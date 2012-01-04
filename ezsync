@@ -59,7 +59,7 @@ if [ ${PID} ]; then
 	exit 0
 fi
 
-# Optionally purge temp directory or log file only
+# Optionally purge whole temp directory or log file only
 if isEnabled ${EZOPT_PURGETMP}; then
 	printInfo "Clearing temp directory..."
 	cleanTemp
