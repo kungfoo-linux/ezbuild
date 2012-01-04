@@ -19,7 +19,7 @@ loadConfiguration
 PID=$(pidof -s -o '%PPID' -x ${EZNAME})
 if [ ${PID} ]; then
 	printWarn "The ${EZNAME} is already working with PID: ${PID}"
-	printWarn "You cannot have more than one instancies running"
+	printWarn "You cannot have more than one instancy running"
 	exit 0
 fi
 
