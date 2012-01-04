@@ -17,8 +17,39 @@ loadConfiguration
 
 # Print EzBuild notice and parse arguments
 printNotice
+until [[ -z "${1}" ]]; do
+	case "${1}" in
+		-c|--cleanlog)
+			printInfo "Clearing log files..."
+			cleanLogs
+			;;
+		-h|--help)
+			printEzsyncUsage
+			;;
+		-p|--purge)
+			printInfo "Clearing temp directory..."
+			cleanTemp
+			;;
+		-P|--purgeonly)
+			printInfo "Clearing temp directory..."
+			cleanTemp
+			quit
+			;;
+		-s|--syscheck)
+			EZOPT_SYSCHECKONLY=1
+			;;
+		*)
+			die "Unrecognized option ${1}"
+			;;
+	esac
+	shift
+done
 
 # Check system requirements
 printInfo "Checking system prerequisites..."
 checkPrerequisites
-[ ${?} -ne 0 ] && die "Your environment does not meet EzBuild requirements"
+[ ${?} -ne 0 ] && die "Your environment does not meet EzBuild requirements!"
+if isEnabled ${EZOPT_SYSCHECKONLY}; then
+	printInfo "Your system meets all EzBuild requirements!"
+	quit
+fi

@@ -4,7 +4,7 @@
 
 
 #-------------------------------------------------------------------------------
-# Completely removes log files
+# Completely removes log file
 #-------------------------------------------------------------------------------
 function cleanLogs() {
 	rm -rf ${LOGFILE} &> /dev/null
