@@ -38,4 +38,5 @@ Requirements
  * dev-vcs/git (GIT repository support)
  * dev-vcs/mercurial (HG repository support)
  * dev-vcs/subversion (SVN repository support)
+ * net-misc/keychain (manager for ssh-agent)
  * sys-fs/squashfs-tools (SquashFS support)
