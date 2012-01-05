@@ -11,7 +11,7 @@ function cleanLog() {
 }
 
 #-------------------------------------------------------------------------------
-# Completely removes temp directory
+# Completely removes whole temp directory
 #-------------------------------------------------------------------------------
 function cleanTemp() {
 	rm -rf ${TEMPDIR} &> /dev/null
@@ -62,7 +62,7 @@ function makeDirectory() {
 }
 
 #-------------------------------------------------------------------------------
-# Creates a symbolic link between to files in specified target directory
+# Creates a symbolic link between two files in specified target directory
 # Parameters: %source% %target%
 #-------------------------------------------------------------------------------
 function makeLink() {
