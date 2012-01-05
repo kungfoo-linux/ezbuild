@@ -48,6 +48,18 @@ function download() {
 }
 
 #-------------------------------------------------------------------------------
+# Creates all 'core' directories necessary for EzBuild to operate
+#-------------------------------------------------------------------------------
+function makeCoreDirectories() {
+	local DIRS="${BINDIR} ${BUILDDIR} ${LOGFILE%/*} ${OVERLAYSDIR} \
+		${PACKAGESDIR} ${PORTAGESDIR} ${TEMPDIR} ${TRASHDIR}"
+	for DIR in ${DIRS}; do
+		makeDirectory ${DIR} || return 1
+	done
+	return 0
+}
+
+#-------------------------------------------------------------------------------
 # Creates all components of the specified directories
 # Parameters: %directory%
 #-------------------------------------------------------------------------------
