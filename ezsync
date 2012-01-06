@@ -70,3 +70,7 @@ elif isEnabled ${EZOPT_CLEANLOG}; then
 	printInfo "Clearing log file..."
 	cleanLog
 fi
+
+# Create all necessary directories
+makeCoreDirectories
+[ ${?} -ne 0 ] && die "EzBuild was unable to create all necessary directories!" 1
