@@ -160,7 +160,11 @@ function logMessage() {
 #-------------------------------------------------------------------------------
 function logOutput() {
 	if isEnabled ${LOGGING}; then
-		echo -e "${@}" | awk '{ print "   )> ", $0; }' >> ${LOGFILE}
+		if [ -z "${@}" ]; then
+			echo -e "   )>  (NO OUTPUT)" >> ${LOGFILE}
+		else
+			echo -e "${@}" | awk '{ print "   )> ", $0; }' >> ${LOGFILE}
+		fi
 	fi
 }
 
