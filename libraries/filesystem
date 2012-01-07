@@ -19,7 +19,7 @@ function cleanTemp() {
 
 #-------------------------------------------------------------------------------
 # Downloads files into specified or current directory
-# Parameters: %url% %directory%
+# Parameters: %url% [%dest_directory%]
 #-------------------------------------------------------------------------------
 function download() {
 	local DEST FILENAME RESULT URL
@@ -75,7 +75,7 @@ function makeDirectory() {
 
 #-------------------------------------------------------------------------------
 # Creates a symbolic link between two files in specified target directory
-# Parameters: %source% %target%
+# Parameters: %source% %target_dir%
 #-------------------------------------------------------------------------------
 function makeLink() {
 	local DESTDIR OUTPUT RESULT
@@ -91,7 +91,7 @@ function makeLink() {
 
 #-------------------------------------------------------------------------------
 # Extracts any tar based archive into specified directory
-# Parameters: %tarball% %destination%
+# Parameters: %tarball% %dest_directory%
 #-------------------------------------------------------------------------------
 function unpack() {
 	local DST EXT OUTPUT RESULT SRC

@@ -139,7 +139,7 @@ function loadLibraries() {
 
 #-------------------------------------------------------------------------------
 # Saves specified message into a log file
-# Parameters: %message% %level%
+# Parameters: %message% [%level%]
 #-------------------------------------------------------------------------------
 function logMessage() {
 	local DATE MESSAGE TYPE
