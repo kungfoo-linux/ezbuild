@@ -135,6 +135,7 @@ function loadConfiguration() {
 function loadLibraries() {
 	source ${EZROOT}/libraries/constants &> /dev/null || panic
 	source ${EZROOT}/libraries/filesystem &> /dev/null || panic
+	source ${EZROOT}/libraries/repositories &> /dev/null || panic
 }
 
 #-------------------------------------------------------------------------------
