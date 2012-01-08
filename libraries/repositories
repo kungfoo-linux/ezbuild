@@ -1,0 +1,19 @@
+#!/bin/bash
+# Copyright 2010-2012, Asio Software Technologies
+# Distributed under the terms of the GNU General Public License v3
+
+
+#-------------------------------------------------------------------------------
+# Downloads or updates specified RSYNC repository
+# Parameters: %dest_directory% %address%
+#-------------------------------------------------------------------------------
+function checkoutRsync() {
+	DIRECTORY="${1}"
+	ADDRESS="${2}"
+	run "rsync --compress --delete --delete-after --devices --force --links \
+		--partial --perms --recursive --safe-links --stats --times \
+		--timeout=${FETCHTIMEOUT} --whole-file --exclude=/.git --exclude=CVS \
+		--exclude=/distfiles --exclude=/local --exclude=/metadata/cache \
+		--exclude=/packages ${ADDRESS} ${DIRECTORY}" || return 1
+	return 0
+}
