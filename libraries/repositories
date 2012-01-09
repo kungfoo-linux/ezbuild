@@ -4,6 +4,29 @@
 
 
 #-------------------------------------------------------------------------------
+# Downloads or updates specified GIT repository
+# Parameters: %dest_directory% %address% [%branch%]
+#-------------------------------------------------------------------------------
+function checkoutGit() {
+	local DIRECTORY="${1}"
+	local ADDRESS="${2}"
+	local BRANCH="${3:-master}"
+	if [ -d ${DIRECTORY} ]; then
+		cd ${DIRECTORY}
+		run "git reset --hard origin/${BRANCH}" || return 1
+		run "git clean --force" || return 1
+		run "git pull --no-stat" || return 1
+	else
+		run "git clone ${ADDRESS} ${DIRECTORY}" || return 1
+		if [ ${BRANCH} != "master" ]; then
+			cd ${DIRECTORY}
+			run "git checkout ${BRANCH}" || return 1
+		fi
+	fi
+	return 0
+}
+
+#-------------------------------------------------------------------------------
 # Downloads or updates specified RSYNC repository
 # Parameters: %dest_directory% %address%
 #-------------------------------------------------------------------------------
