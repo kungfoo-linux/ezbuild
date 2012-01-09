@@ -25,6 +25,14 @@ until [[ -z "${1}" ]]; do
 		-h|--help)
 			showEzsyncUsage
 			;;
+		-n|--nosync)
+			shift
+			if [ -z ${1} ]; then
+				die "--nosync requires an additional argument!"
+			else
+				EZNOSYNC=${EZNOSYNC+"$EZNOSYNC "}"${1}"
+			fi
+			;;
 		-p|--purge)
 			EZOPT_PURGETMP=true
 			;;
