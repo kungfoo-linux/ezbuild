@@ -51,7 +51,7 @@ function checkVersion() {
 # Parameters: %message% %code%
 #-------------------------------------------------------------------------------
 function die() {
-	if isEnabled ${LOGGING} && isSet NOTIFY; then
+	if isEnabled ${LOGGING} && isSet NOTIFY && isEnabled ${EZNOTIFY}; then
 		local LOGS="Full output from logs:\n\n$(cat ${LOGFILE})"
 		local MESG="The ${EZNAME} has failed with code: ${2} and message: ${1}"
 		local TOPIC="The ${EZNAME} process has failed!"
