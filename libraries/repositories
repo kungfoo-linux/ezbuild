@@ -70,3 +70,25 @@ function makeSshWrapper() {
 	export SVN_SSH="${BINDIR}/ssh_wrapper.sh"
 	return 0
 }
+
+#-------------------------------------------------------------------------------
+# Synchronizes specified repository regardless its protocol
+# Parameters: %dest_directory% %protocol% %address% [%branch%]
+#-------------------------------------------------------------------------------
+function synchronizeRepository() {
+	for ((i=0; $i<${FETCHTRIES}; i++)); do
+		case "${2}" in
+			git|GIT)
+				checkoutGit $1 $3 $4 && return 0
+				;;
+			rsync|RSYNC)
+				checkoutRsync $1 $3 && return 0
+				;;
+			svn|SVN)
+				checkoutSubversion $1 $3 && return 0
+				;;
+		esac
+		sleep ${FETCHTIMEOUT}
+	done
+	return 1
+}
