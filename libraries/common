@@ -64,7 +64,7 @@ function die() {
 
 #-------------------------------------------------------------------------------
 # Checks whether a defined variable contain specified element or not
-# Parameters: %variable% %element%
+# Parameters: %element% %variable%
 #-------------------------------------------------------------------------------
 function hasElement() {
 	local NEEDLE=${1}
