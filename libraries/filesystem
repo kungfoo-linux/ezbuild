@@ -90,17 +90,21 @@ function makeLink() {
 }
 
 #-------------------------------------------------------------------------------
-# Makes block or character special file (wrapper to mknod)
-# Parameters: %directory% %name% %type% [%major%] [%minor%]
+# Makes block or character special file with specified mode bits
+# Parameters: %directory% %chmod% %name% %type% [%major%] [%minor%]
 #-------------------------------------------------------------------------------
 function makeNode() {
 	local DIRECTORY="${1}"
-	shift
+	local CHMOD="${2}"
+	local NAME="${3}"
+	shift 3
 	if [ ! -d ${DIRECTORY} ]; then
 		makeDirectory ${DIRECTORY} || return 1
 	fi
 	cd ${DIRECTORY}
-	run "mknod ${*}" || return 1
+	rm -rf ${NAME}
+	run "mknod ${NAME} ${*}" || return 1
+	run "chmod ${CHMOD} ${NAME}" || return 1
 	return 0
 }
 
