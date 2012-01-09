@@ -79,12 +79,11 @@ elif isEnabled ${EZOPT_CLEANLOG}; then
 	cleanLog
 fi
 
-# Create all necessary directories
-makeCoreDirectories
-[ ${?} -ne 0 ] && die "EzBuild was unable to create all necessary directories!" 1
-
-# Enable notifications
+# Initialize EzBuild environment
+makeCoreDirectories || die "EzBuild was unable to create all necessary directories!" 1
 EZNOTIFY="yes"
+makeSshWrapper || die "EzBuild was unable to create a wrapper file to SSH" 1
+trap 'die "Process killed! This may lead into unexpected problems!"' 1 2 3 9 15 17 18 23
 
 # Load necessary public keys
 printInfo "Loading public keys..."
