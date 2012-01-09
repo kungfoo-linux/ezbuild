@@ -78,13 +78,13 @@ function makeSshWrapper() {
 function synchronizeRepository() {
 	for ((i=0; $i<${FETCHTRIES}; i++)); do
 		case "${2}" in
-			git|GIT)
+			[Gg][Ii][Tt])
 				checkoutGit $1 $3 $4 && return 0
 				;;
-			rsync|RSYNC)
+			[Rr][Ss][Yy][Nn][Cc])
 				checkoutRsync $1 $3 && return 0
 				;;
-			svn|SVN)
+			[Ss][Vv][Nn])
 				checkoutSubversion $1 $3 && return 0
 				;;
 		esac
