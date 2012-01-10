@@ -123,8 +123,10 @@ function isSet() {
 # Loads EzBuild configuration
 #-------------------------------------------------------------------------------
 function loadConfiguration() {
+	source ${EZROOT}/config/common.conf &> /dev/null || panic
 	source ${EZROOT}/config/${EZNAME}.conf &> /dev/null || panic
 	source ${EZROOT}/config/layout.conf &> /dev/null || panic
+	source /etc/ezbuild/common.conf &> /dev/null || panic
 	source /etc/ezbuild/${EZNAME}.conf &> /dev/null || panic
 	source /etc/ezbuild/layout.conf &> /dev/null || panic
 }
