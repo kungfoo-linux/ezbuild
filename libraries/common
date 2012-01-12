@@ -59,6 +59,20 @@ function die() {
 }
 
 #-------------------------------------------------------------------------------
+# Failure handler; outputs warning or error depending on user settings
+# Parameters: %message% [%status%]
+#-------------------------------------------------------------------------------
+function fail() {
+	local STATUS=${2:-1}
+	if isEnabled ${FATALERRORS}; then
+		die "${1}" ${STATUS}
+	else
+		pushNotification ${STATUS} "${1}"
+		printWarn "${1}"
+	fi
+}
+
+#-------------------------------------------------------------------------------
 # Checks whether a defined variable contain specified element or not
 # Parameters: %element% %variable%
 #-------------------------------------------------------------------------------
@@ -173,10 +187,32 @@ function logOutput() {
 #-------------------------------------------------------------------------------
 function notify() {
 	if isEnabled ${LOGGING} && isSet NOTIFY && isEnabled ${EZNOTIFY}; then
-		local LOGS="Full output from logs:\n\n$(cat ${LOGFILE})"
-		local MESG="The ${EZNAME} has failed with code: ${1} and message: ${2}"
-		local TOPIC="The ${EZNAME} process has failed!"
-		echo -e "${MESG}\n${LOGS}" | mailx -s "${TOPIC}" "${NOTIFY}"
+		local MESG=""
+		local SEND=0
+		if [ ${1} -ne 0 ]; then
+			MESG="The ${EZNAME} has failed with code: ${1} and message: ${2}"
+			SEND=1
+			if [ ${#NOTIFICATIONS[@]} -ne 0 ]; then
+				MESG="${MESG}\nThere were also some non-fatal errors that has \
+					been treated as warnings:"
+			fi
+		elif [ ${#NOTIFICATIONS[@]} -ne 0 ]; then
+			MESG="The ${EZNAME} process has ended its job without any fatal \
+				error, but there still were some non-fatal errors that has \
+				been treated as warnings:"
+				SEND=1
+		fi
+		MESG=$(echo -e "${MESG}" | awk -v OFS=" " '$1=$1')
+		if [ ${SEND} -eq 1 ]; then
+			if [ ${#NOTIFICATIONS[@]} -ne 0 ]; then
+				for NOTIFICATION in "${NOTIFICATIONS[@]}"; do
+					MESG="${MESG}\n * ${NOTIFICATION}"
+				done
+			fi
+			local LOGS="Full output from log file:\n\n$(cat ${LOGFILE})"
+			local TOPIC="The ${EZNAME} process has produced an error!"
+			echo -e "${MESG}\n\n\n${LOGS}" | mailx -s "${TOPIC}" "${NOTIFY}"
+		fi
 	fi
 }
 
@@ -225,7 +261,20 @@ function printWarn() {
 	echo -e " ${MESSAGE_WARN} ${@}"
 }
 
+#-------------------------------------------------------------------------------
+# Adds new non-fatal error notification message to the queue
+# Parameters: %status% %message%
+#-------------------------------------------------------------------------------
+function pushNotification() {
+	local NUM=${#NOTIFICATIONS[@]}
+	NOTIFICATIONS[${NUM}]="Code: ${1} Message: ${2}"
+}
+
+#-------------------------------------------------------------------------------
+# Optionally sends all notifications from queue and aborts program execution
+#-------------------------------------------------------------------------------
 function quit() {
+	notify 0
 	echo -e "${COLOR_BOLD}ALL DONE!\n${COLOR_NORMAL}"
 	exit 0
 }
