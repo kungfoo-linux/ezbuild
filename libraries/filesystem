@@ -60,6 +60,16 @@ function makeCoreDirectories() {
 }
 
 #-------------------------------------------------------------------------------
+# Creates all components of the specified directories assuming thay are empty
+# Parameters: %directory%
+#-------------------------------------------------------------------------------
+function makeCleanDirectory() {
+	rm -rf "${@}"
+	makeDirectory "${@}"
+	return ${?}
+}
+
+#-------------------------------------------------------------------------------
 # Creates all components of the specified directories
 # Parameters: %directory%
 #-------------------------------------------------------------------------------
