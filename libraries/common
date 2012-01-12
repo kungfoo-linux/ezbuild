@@ -47,14 +47,15 @@ function checkVersion() {
 }
 
 #-------------------------------------------------------------------------------
-# Outputs formatted error message and aborts script execution with given code
-# Parameters: %message% %code%
+# Outputs formatted error message and aborts script execution with given status
+# Parameters: %message% [%status%]
 #-------------------------------------------------------------------------------
 function die() {
-	notify "${1}" ${2}
+	local STATUS=${2:-1}
+	notify "${1}" ${STATUS}
 	printError "${1}"
 	echo -ne "\n"
-	exit ${2}
+	exit ${STATUS}
 }
 
 #-------------------------------------------------------------------------------
