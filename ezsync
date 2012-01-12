@@ -93,4 +93,19 @@ eval `keychain --noask --eval id_dsa id_rsa &> /dev/null`
 # Update local copy of Portage that is being built
 printInfo "Refreshing local build Portage tree..."
 synchronizeRepository ${PORTAGESDIR}/${PORTAGE_BUILD[0]} ${PORTAGE_BUILD[1]} ${PORTAGE_BUILD[2]} ${PORTAGE_BUILD[3]}
-[ ${?} -ne 0 ] && die "EzBuild was unable to refresh local copy of build Portage tree!"
+[ ${?} -ne 0 ] && die "EzBuild was unable to refresh local copy of build Portage tree!" 2
+
+# Update local copy of mainline Portage
+if ! hasElement "mainline" ${EZNOSYNC} && ! hasElement "portage" ${EZNOSYNC}; then
+	printInfo "Synchronizing mainline Portage tree..."
+	synchronizeRepository ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]} ${PORTAGE_MAINLINE[1]} ${PORTAGE_MAINLINE[2]} ${PORTAGE_MAINLINE[3]}
+	[ ${?} -ne 0 ] && die "EzBuild was unable to synchronize mainline Portage tree!" 2
+	[ -e ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/metadata/cache ] && rm -rf ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/metadata/cache
+	echo "distfiles/*" > ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/.gitignore
+	echo "packages/*" >> ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/.gitignore
+	if [ ! -d ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.mask ]; then
+		mv ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.mask ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.mask.bak &> /dev/null
+		makeDirectory ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.mask
+		mv ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.mask.bak ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.mask/${PORTAGE_MAINLINE[0]%-*} &> /dev/null
+	fi
+fi
