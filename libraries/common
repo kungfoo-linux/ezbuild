@@ -51,12 +51,7 @@ function checkVersion() {
 # Parameters: %message% %code%
 #-------------------------------------------------------------------------------
 function die() {
-	if isEnabled ${LOGGING} && isSet NOTIFY && isEnabled ${EZNOTIFY}; then
-		local LOGS="Full output from logs:\n\n$(cat ${LOGFILE})"
-		local MESG="The ${EZNAME} has failed with code: ${2} and message: ${1}"
-		local TOPIC="The ${EZNAME} process has failed!"
-		echo -e "${MESG}\n${LOGS}" | mailx -s "${TOPIC}" "${NOTIFY}"
-	fi
+	notify "${1}" ${2}
 	printError "${1}"
 	echo -ne "\n"
 	exit ${2}
@@ -168,6 +163,19 @@ function logOutput() {
 		else
 			echo -e "${@}" | awk '{ print "   )> ", $0; }' >> ${LOGFILE}
 		fi
+	fi
+}
+
+#-------------------------------------------------------------------------------
+# Sends an e-mail notification about occured error
+# Parameters: %message% %code%
+#-------------------------------------------------------------------------------
+function notify() {
+	if isEnabled ${LOGGING} && isSet NOTIFY && isEnabled ${EZNOTIFY}; then
+		local LOGS="Full output from logs:\n\n$(cat ${LOGFILE})"
+		local MESG="The ${EZNAME} has failed with code: ${2} and message: ${1}"
+		local TOPIC="The ${EZNAME} process has failed!"
+		echo -e "${MESG}\n${LOGS}" | mailx -s "${TOPIC}" "${NOTIFY}"
 	fi
 }
 
