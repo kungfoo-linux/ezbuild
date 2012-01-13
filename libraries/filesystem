@@ -129,6 +129,7 @@ function mergeOverlay() {
 	local FTS="${4}"
 	local ORW="${5}"
 	local SRC="${1}"
+	local TOPDIR="$(pwd)"
 	makeCleanDirectory ${TRASHDIR}/ebuilds || return 1
 	cd ${SRC}
 	saveIFS ","
@@ -167,7 +168,8 @@ function mergeOverlay() {
 		done < <(find * -maxdepth 0)
 		cd ..
 	done < <(find * -maxdepth 0 -type d)
-	rm -rf ${TRASHDIR}/ebuilds/*
+	cd ${TOPDIR}
+	rm -rf ${TRASHDIR}/ebuilds
 	return 0
 }
 
