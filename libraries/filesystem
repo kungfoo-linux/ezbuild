@@ -142,7 +142,7 @@ function mergeOverlay() {
 			run "cp -apf --parents ${ITEM} ${TRASHDIR}/ebuilds/" || return 1
 		done
 	fi
-	if [ "$(toUpper ${FTS})" != "NONE" ]; then
+	if [ "$(toUpper ${FTS})" != "NONE" ] && [ "$(toUpper ${FTS})" != "N/A" ]; then
 		for ITEM in ${FTS}; do
 			rm -rf ${TRASHDIR}/ebuilds/${ITEM}
 		done
