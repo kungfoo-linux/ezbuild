@@ -330,6 +330,7 @@ function showEzsyncUsage() {
 	echo -e "  -c\t--cleanlog\tclears log file; not working with -p and -P"
 	echo -e "  -h\t--help\t\tdisplays this screen and exits immediately"
 	echo -e "  -n\t--nosync\tspecifies the ebuilds source that will be omitted"
+	echo -e "  -N\t--nopush\tavoids automatic commits into repositories"
 	echo -e "  -p\t--purge\t\tclears temporary folder"
 	echo -e "  -P\t--purgeonly\tclears temporary folder and exits"
 	echo -e "  -s\t--syscheck\tperforms prerequisites check only"
