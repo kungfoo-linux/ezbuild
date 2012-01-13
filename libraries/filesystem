@@ -119,6 +119,59 @@ function makeNode() {
 }
 
 #-------------------------------------------------------------------------------
+# Merges data from source overlay into destination directory
+# Parameters: %src_directory$ %dest_directory% %files_to_copy% %files_to_skip%
+#             %overwrite%
+#-------------------------------------------------------------------------------
+function mergeOverlay() {
+	local DST="${2}"
+	local FTC="${3}"
+	local FTS="${4}"
+	local ORW="${5}"
+	local SRC="${1}"
+	makeCleanDirectory ${TRASHDIR}/ebuilds || return 1
+	cd ${SRC}
+	saveIFS ","
+	if [ "$(toUpper ${FTC})" == "ALL" ]; then
+		run "cp -apf *-* ${TRASHDIR}/ebuilds/"
+		run "cp -apf eclass ${TRASHDIR}/ebuilds/"
+		run "cp -apf licenses ${TRASHDIR}/ebuilds/"
+		run "cp -apf virtual ${TRASHDIR}/ebuilds/"
+	else
+		for ITEM in ${FTC}; do
+			run "cp -apf --parents ${ITEM} ${TRASHDIR}/ebuilds/" || return 1
+		done
+	fi
+	if [ "$(toUpper ${FTS})" != "NONE" ]; then
+		for ITEM in ${FTS}; do
+			rm -rf ${TRASHDIR}/ebuilds/${ITEM}
+		done
+	fi
+	restoreIFS
+	cd ${TRASHDIR}/ebuilds
+	find -type d -name ".svn" -o -name "CVS" | xargs rm -rf {}
+	while read CAT; do
+		cd ${CAT}
+		while read PACK; do
+			if [ -e ${DST}/${CAT}/${PACK} ]; then
+				if isEnabled ${ORW}; then
+					rm -rf ${DST}/${CAT}/${PACK}
+				else
+					continue
+				fi
+			fi
+			if [ ! -d ${DST}/${CAT} ]; then
+				makeDirectory ${DST}/${CAT} || return 1
+			fi
+			run "cp -apf ${PACK} ${DST}/${CAT}/${PACK}" || return 1
+		done < <(find * -maxdepth 0)
+		cd ..
+	done < <(find * -maxdepth 0 -type d)
+	rm -rf ${TRASHDIR}/ebuilds
+	return 0
+}
+
+#-------------------------------------------------------------------------------
 # Extracts any tar based archive into specified directory
 # Parameters: %tarball% %dest_directory%
 #-------------------------------------------------------------------------------
