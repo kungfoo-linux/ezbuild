@@ -167,7 +167,7 @@ function mergeOverlay() {
 		done < <(find * -maxdepth 0)
 		cd ..
 	done < <(find * -maxdepth 0 -type d)
-	rm -rf ${TRASHDIR}/ebuilds
+	rm -rf ${TRASHDIR}/ebuilds/*
 	return 0
 }
 
