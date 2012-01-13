@@ -97,3 +97,38 @@ function pullSubversion() {
 	fi
 	return 0
 }
+
+#-------------------------------------------------------------------------------
+# Sends an update to remote GIT reository
+# Parameters: %directory% %message%
+#-------------------------------------------------------------------------------
+function pushGit() {
+	local DIRECTORY="${1}"
+	local MESSAGE="${2}"
+	local STATUS
+	[ ! -d ${DIRECTORY} ] && return 1
+	cd ${DIRECTORY}
+	run "git add ." || return 1
+	STATUS=$(git status --porcelain)
+	if [ "${STATUS}" != "" ]; then
+		run "git commit -a -m ${MESSAGE}" || return 1
+		run "git push" || return 1
+	fi
+	return 0
+}
+
+#-------------------------------------------------------------------------------
+# Sends an update to specified remote repository regardless its protocol
+# Parameters: %directory% %protocol% %message%
+#-------------------------------------------------------------------------------
+function pushRepository() {
+	case "${2}" in
+		[Gg][Ii][Tt])
+			pushGit "${1}" "${3}" && return 0
+			;;
+		*)
+			printWarn "Tried to push data using unsupported protocol (${2})!"
+			;;
+	esac
+	return 1
+}
