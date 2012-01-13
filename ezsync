@@ -124,3 +124,18 @@ for OVERLAY in ${SYNC_OVERLAYS[*]}; do
 		[ ${?} -ne 0 ] && fail "EzBuild was unable to synchronize ${CURRENT_OVERLAY[0]}!" 4
 	fi
 done
+
+# Optionally merge data into build overlay
+if isSet MERGED_OVERLAY && isSet OVERLAY_BUILD; then
+	printInfo "Merging ebuilds into building Overlay..."
+	for OVERLAY in ${MERGED_OVERLAY[*]}; do
+		TEMP="\${$OVERLAY[*]}"
+		CURRENT_OVERLAY=(`eval echo ${TEMP}`)
+		mergeOverlay ${OVERLAYSDIR}/${CURRENT_OVERLAY[0]} ${OVERLAYSDIR}/${OVERLAY_BUILD[0]} ${CURRENT_OVERLAY[4]} ${CURRENT_OVERLAY[5]} ${CURRENT_OVERLAY[6]}
+		[ ${?} -ne 0 ] && fail "EzBuild was unable to merge ebuilds into overlay!" 8
+	done
+	if ! isEnabled ${EZOPT_NOPUSH}; then
+		pushRepository ${OVERLAYSDIR}/${OVERLAY_BUILD[0]} ${OVERLAY_BUILD[1]} "Automatic overlay update [$(date +"${PUSHDATEFORMAT}")]."
+		[ ${?} -ne 0 ] && die "Ezbuild was unable to record changes to the remote overlay repository!" 8
+	fi
+fi
