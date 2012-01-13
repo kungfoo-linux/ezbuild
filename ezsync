@@ -109,3 +109,15 @@ if ! hasElement "mainline" ${EZNOSYNC} && ! hasElement "portage" ${EZNOSYNC}; th
 		mv ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.mask.bak ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.mask/${PORTAGE_MAINLINE[0]%-*} &> /dev/null
 	fi
 fi
+
+# Update all overlays (including the one that's optionally going to be built)
+SYNC_OVERLAYS=( ${MERGED_OVERLAY[*]} ${MERGED_PORTAGE[*]} )
+for OVERLAY in ${SYNC_OVERLAYS[*]}; do
+	TEMP="\${$OVERLAY[*]}"
+	CURRENT_OVERLAY=(`eval echo ${TEMP}`)
+	if ! hasElement "${CURRENT_OVERLAY[0]}" ${EZNOSYNC}; then
+		printInfo "Synchronizing overlay: ${CURRENT_OVERLAY[0]}..."
+		synchronizeRepository ${OVERLAYSDIR}/${CURRENT_OVERLAY[0]} ${CURRENT_OVERLAY[1]} ${CURRENT_OVERLAY[2]} ${CURRENT_OVERLAY[3]}
+		[ ${?} -ne 0 ] && fail "EzBuild was unable to synchronize ${CURRENT_OVERLAY[0]}!" 4
+	fi
+done
