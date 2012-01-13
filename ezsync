@@ -94,7 +94,7 @@ eval `keychain --noask --eval id_dsa id_rsa &> /dev/null`
 [ ${?} -ne 0 ] && die "EzBuild was unable to load public keys!" 1
 
 # Update local copy of Portage that is being built
-printInfo "Refreshing local build Portage tree..."
+printInfo "Refreshing local copy of build Portage tree..."
 pullRepository ${PORTAGESDIR}/${PORTAGE_BUILD[0]} ${PORTAGE_BUILD[1]} ${PORTAGE_BUILD[2]} ${PORTAGE_BUILD[3]}
 [ ${?} -ne 0 ] && die "EzBuild was unable to refresh local copy of build Portage tree!" 2
 
