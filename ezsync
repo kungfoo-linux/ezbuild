@@ -127,7 +127,7 @@ done
 
 # Optionally merge data into build overlay
 if isSet MERGED_OVERLAY && isSet OVERLAY_BUILD; then
-	printInfo "Merging ebuilds into building Overlay..."
+	printInfo "Merging ebuilds into constructed Overlay..."
 	for OVERLAY in ${MERGED_OVERLAY[*]}; do
 		TEMP="\${$OVERLAY[*]}"
 		CURRENT_OVERLAY=(`eval echo ${TEMP}`)
@@ -141,7 +141,7 @@ if isSet MERGED_OVERLAY && isSet OVERLAY_BUILD; then
 fi
 
 # Merge data into build portage
-printInfo "Merging ebuilds into building Portage..."
+printInfo "Merging ebuilds into constructed Portage..."
 pullRsync ${PORTAGESDIR}/${PORTAGE_BUILD[0]} ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/
 [ ${?} -ne 0 ] && die "EzBuild was unable to merge ebuilds into Portage tree!" 16
 for OVERLAY in ${MERGED_PORTAGE[*]}; do
