@@ -2,8 +2,3 @@ EZMOD_DESCRIPTION="Sample module for learning and testing purposes"
 EZMOD_COMPATIBILITY="ezbuild ezsync"
 EZMOD_AUTHOR="Rafal Kupiec"
 EZMOD_VERSION="0.1"
-
-ezsync_postsync() {
-	printWarn "fdgdfs"
-#	return 1
-}
