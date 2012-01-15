@@ -160,6 +160,38 @@ function loadLibraries() {
 }
 
 #-------------------------------------------------------------------------------
+# Loads and executes given EzBuild module
+# Parameters: %module% %step%
+#-------------------------------------------------------------------------------
+function loadModule() {
+	local MODULE="${1}"
+	local FUNCTION="${EZNAME}_${2}"
+	if [ -e ${MODULESCUSTOMDIR}/${MODULE}.ezmod ]; then
+		source ${MODULESCUSTOMDIR}/${MODULE}.ezmod &> /dev/null
+	else
+		source ${EZROOT}/modules/${MODULE}.ezmod &> /dev/null
+	fi
+	if [ ${?} -eq 0 ] && hasElement ${EZNAME} ${EZMOD_COMPATIBILITY}; then
+		if [ -e ${MODULESCUSTOMDIR}/${MODULE}.conf ]; then
+			source ${EZROOT}/config/modules/${MODULE}.conf &> /dev/null
+			source ${MODULESCUSTOMDIR}/${MODULE}.conf &> /dev/null
+		elif [ -e /etc/ezbuild/modules/${MODULE}.conf ]; then
+			source ${EZROOT}/config/modules/${MODULE}.conf &> /dev/null
+			source /etc/ezbuild/modules/${MODULE}.conf &> /dev/null
+		fi
+		if [ ${?} -eq 0 ]; then
+			if functionExists ${FUNCTION}; then
+				eval ${FUNCTION}
+				return ${?}
+			else
+				return 255
+			fi
+		fi
+	fi
+	return 1
+}
+
+#-------------------------------------------------------------------------------
 # Saves specified message into a log file
 # Parameters: %message% [%level%]
 #-------------------------------------------------------------------------------
