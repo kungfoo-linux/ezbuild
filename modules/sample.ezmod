@@ -1,3 +1,5 @@
+# Copyright 2010-2012, Asio Software Technologies
+# Distributed under the terms of the GNU General Public License v3
 EZMOD_DESCRIPTION="Sample module for learning and testing purposes"
 EZMOD_COMPATIBILITY="ezbuild ezsync"
 EZMOD_AUTHOR="Rafal Kupiec"
