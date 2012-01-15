@@ -412,3 +412,17 @@ function toUpper() {
 function trim() {
 	echo ${1}
 }
+
+#-------------------------------------------------------------------------------
+# Silently unloads any previously loaded module
+#-------------------------------------------------------------------------------
+function unloadModule() {
+	unset EZMOD_AUTHOR
+	unset EZMOD_COMPATIBILITY
+	unset EZMOD_DESCRIPTION
+	unset EZMOD_VERSION
+	unset ezsync_precommit
+	unset ezsync_presync
+	unset ezsync_postcommit
+	unset ezsync_postsync
+}
