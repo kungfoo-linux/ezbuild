@@ -73,6 +73,15 @@ function fail() {
 }
 
 #-------------------------------------------------------------------------------
+# Checks if the given function has been defined
+# Parameters: %function%
+#-------------------------------------------------------------------------------
+function functionExists() {
+	type ${1} 2>/dev/null | grep -q "is a function"
+	return ${?}
+}
+
+#-------------------------------------------------------------------------------
 # Checks whether a defined variable contain specified element or not
 # Parameters: %element% %variable%
 #-------------------------------------------------------------------------------
