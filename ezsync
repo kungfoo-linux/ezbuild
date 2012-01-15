@@ -154,3 +154,6 @@ for OVERLAY in ${MERGED_PORTAGE[*]}; do
 		[ ${?} -ne 0 ] && die "EzBuild was unable to merge package.mask file into Portage tree!" 16
 	fi
 done
+
+# Finally quit the application
+quit
