@@ -199,6 +199,12 @@ printInfo "Updating constructed Portage cache..."
 run "FEATURES="metadata-transfer" PORTDIR="${PORTAGESDIR}/${PORTAGE_BUILD[0]}" egencache --update --portdir=${PORTAGESDIR}/${PORTAGE_BUILD[0]} --jobs=${MAXJOBS} --load-average=${LOADAVERAGE} --tolerant"
 [ ${?} -ne 0 ] && die "EzBuild was unable to regenerate cache!" 32
 
+# Optionally commit all changes to remote Portage repository
+if ! isEnabled ${EZOPT_NOPUSH}; then
+	pushRepository ${PORTAGESDIR}/${PORTAGE_BUILD[0]} ${PORTAGE_BUILD[1]} "Automatic update [$(date +"${PUSHDATEFORMAT}")]."
+	[ ${?} -ne 0 ] && die "Ezbuild was unable to record changes to the remote Portage repository!" 64
+fi
+
 # Execute all 'postcommit' enabled modules
 for MODULE in ${MODULES_POSTCOMMIT}; do
 	loadModule ${MODULE} "postcommit"
@@ -210,12 +216,6 @@ for MODULE in ${MODULES_POSTCOMMIT}; do
 	fi
 	unloadModule
 done
-
-# Optionally commit all changes to remote Portage repository
-if ! isEnabled ${EZOPT_NOPUSH}; then
-	pushRepository ${PORTAGESDIR}/${PORTAGE_BUILD[0]} ${PORTAGE_BUILD[1]} "Automatic update [$(date +"${PUSHDATEFORMAT}")]."
-	[ ${?} -ne 0 ] && die "Ezbuild was unable to record changes to the remote Portage repository!" 64
-fi
 
 # Finally quit the application
 quit
