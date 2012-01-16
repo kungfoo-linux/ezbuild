@@ -52,7 +52,7 @@ function pullMercurial() {
 		run "hg recover"
 		run "hg revert -aC" || return 1
 		run "hg purge" || return 1
-		run "hg pull" || return 1
+		run "hg pull --update" || return 1
 	else
 		run "hg clone ${ADDRESS} ${DIRECTORY}" || return 1
 		if [ ${BRANCH} != "default" ]; then
