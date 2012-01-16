@@ -139,6 +139,35 @@ function isSet() {
 }
 
 #-------------------------------------------------------------------------------
+# Prints a list of available built-in modules
+#-------------------------------------------------------------------------------
+function listModules() {
+	local MODULE
+	echo -e "Modules can be used to enhance EzBuild functionality by handling"
+	echo -e "triggered events. They can be easily enabled and/or disabled in"
+	echo -e "configuration files. Every event has its own list of modules."
+	echo -e "List of built-in modules available for ${EZNAME}:\n"
+	for MODULE in ${EZROOT}/modules/*.ezmod; do
+		source ${MODULE} &> /dev/null
+		if [ ${?} -ne 0 ] || ! hasElement ${EZNAME} ${EZMOD_COMPATIBILITY}; then
+			unloadModule
+			continue
+		fi
+		MODULE=$(basename "${MODULE}" .ezmod)
+		EZMOD_AUTHOR=${EZMOD_AUTHOR:-Unknown}
+		EZMOD_DESCRIPTION=${EZMOD_DESCRIPTION:-No description provided}
+		EZMOD_VERSION=${EZMOD_VERSION:-N/A}
+		echo -e "${COLOR_CYAN}${COLOR_BOLD}  ${MODULE}${COLOR_NORMAL}"
+		echo -e "\t${COLOR_RED}Description:\t${COLOR_CYAN}${EZMOD_DESCRIPTION}"
+		echo -e "\t${COLOR_RED}Version:\t${COLOR_CYAN}${EZMOD_VERSION}"
+		echo -e "\t${COLOR_RED}Author:\t\t${COLOR_CYAN}${EZMOD_AUTHOR}\n"
+		unloadModule
+	done
+	echo -e "${COLOR_WHITE}"
+	exit 0
+}
+
+#-------------------------------------------------------------------------------
 # Loads EzBuild configuration
 #-------------------------------------------------------------------------------
 function loadConfiguration() {
