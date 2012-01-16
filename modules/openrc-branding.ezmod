@@ -1,0 +1,14 @@
+# Copyright 2010-2012, Asio Software Technologies
+# Distributed under the terms of the GNU General Public License v3
+EZMOD_DESCRIPTION="Allows to re-brand the OpenRC package"
+EZMOD_COMPATIBILITY="ezsync"
+EZMOD_AUTHOR="Rafal Kupiec"
+EZMOD_VERSION="1.0"
+
+ezsync_precommit() {
+	printInfo "Enabling custom OpenRC branding..."
+	find ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/sys-apps/openrc -type f -name \*.ebuild | while read EBUILD; do
+		sed -i "s/BRANDING=\"Gentoo \${brand}\"/BRANDING=\"${CUSTOM_OPENRC_BRAND} \${brand}\"/g" ${EBUILD} || return 1
+	done
+	return 0
+}
