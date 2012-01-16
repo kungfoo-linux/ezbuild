@@ -145,6 +145,10 @@ function pushGit() {
 	return 0
 }
 
+#-------------------------------------------------------------------------------
+# Sends an update to remote HG reository
+# Parameters: %directory% %message%
+#-------------------------------------------------------------------------------
 function pushMercurial() {
 	local DIRECTORY="${1}"
 	local MESSAGE="${2}"
