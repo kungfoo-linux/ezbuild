@@ -103,7 +103,7 @@ for MODULE in ${MODULES_PRESYNC}; do
 	if [ ${RESULT} -eq 255 ]; then
 		printWarn "Trying to load module: ${MODULE}, that is incompatible with event: presync!"
 	elif [ ${RESULT} -ne 0 ]; then
-		fail "EzBuild was unable to execute module: ${MODULE}!"
+		fail "EzBuild was unable to execute module: ${MODULE}!" 255
 	fi
 	unloadModule
 done
@@ -147,7 +147,7 @@ for MODULE in ${MODULES_POSTSYNC}; do
 	if [ ${RESULT} -eq 255 ]; then
 		printWarn "Trying to load module: ${MODULE}, that is incompatible with event: postsync!"
 	elif [ ${RESULT} -ne 0 ]; then
-		fail "EzBuild was unable to execute module: ${MODULE}!"
+		fail "EzBuild was unable to execute module: ${MODULE}!" 255
 	fi
 	unloadModule
 done
@@ -189,7 +189,7 @@ for MODULE in ${MODULES_PRECOMMIT}; do
 	if [ ${RESULT} -eq 255 ]; then
 		printWarn "Trying to load module: ${MODULE}, that is incompatible with event: precommit!"
 	elif [ ${RESULT} -ne 0 ]; then
-		fail "EzBuild was unable to execute module: ${MODULE}!"
+		fail "EzBuild was unable to execute module: ${MODULE}!" 255
 	fi
 	unloadModule
 done
@@ -197,7 +197,7 @@ done
 # Regenerate Portage cache
 printInfo "Updating constructed Portage cache..."
 run "FEATURES="metadata-transfer" PORTDIR="${PORTAGESDIR}/${PORTAGE_BUILD[0]}" egencache --update --portdir=${PORTAGESDIR}/${PORTAGE_BUILD[0]} --jobs=${MAXJOBS} --load-average=${LOADAVERAGE} --tolerant"
-[ ${?} -ne 0 ] && die "EzBuild was unable to regenerate cache!"
+[ ${?} -ne 0 ] && die "EzBuild was unable to regenerate cache!" 32
 
 # Execute all 'postcommit' enabled modules
 for MODULE in ${MODULES_POSTCOMMIT}; do
@@ -206,7 +206,7 @@ for MODULE in ${MODULES_POSTCOMMIT}; do
 	if [ ${RESULT} -eq 255 ]; then
 		printWarn "Trying to load module: ${MODULE}, that is incompatible with event: postcommit!"
 	elif [ ${RESULT} -ne 0 ]; then
-		fail "EzBuild was unable to execute module: ${MODULE}!"
+		fail "EzBuild was unable to execute module: ${MODULE}!" 255
 	fi
 	unloadModule
 done
@@ -214,7 +214,7 @@ done
 # Optionally commit all changes to remote Portage repository
 if ! isEnabled ${EZOPT_NOPUSH}; then
 	pushRepository ${PORTAGESDIR}/${PORTAGE_BUILD[0]} ${PORTAGE_BUILD[1]} "Automatic update [$(date +"${PUSHDATEFORMAT}")]."
-	[ ${?} -ne 0 ] && die "Ezbuild was unable to record changes to the remote Portage repository!"
+	[ ${?} -ne 0 ] && die "Ezbuild was unable to record changes to the remote Portage repository!" 64
 fi
 
 # Finally quit the application
