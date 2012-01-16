@@ -211,5 +211,11 @@ for MODULE in ${MODULES_POSTCOMMIT}; do
 	unloadModule
 done
 
+# Optionally commit all changes to remote Portage repository
+if ! isEnabled ${EZOPT_NOPUSH}; then
+	pushRepository ${PORTAGESDIR}/${PORTAGE_BUILD[0]} ${PORTAGE_BUILD[1]} "Automatic update [$(date +"${PUSHDATEFORMAT}")]."
+	[ ${?} -ne 0 ] && die "Ezbuild was unable to record changes to the remote Portage repository!"
+fi
+
 # Finally quit the application
 quit
