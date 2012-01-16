@@ -40,6 +40,30 @@ function pullGit() {
 }
 
 #-------------------------------------------------------------------------------
+# Downloads or updates specified HG repository
+# Parameters: %dest_directory% %address% [%branch%]
+#-------------------------------------------------------------------------------
+function pullMercurial() {
+	local DIRECTORY="${1}"
+	local ADDRESS="${2}"
+	local BRANCH="${3:-default}"
+	if [ -d ${DIRECTORY} ]; then
+		cd ${DIRECTORY}
+		run "hg recover"
+		run "hg revert -aC" || return 1
+		run "hg purge" || return 1
+		run "hg pull" || return 1
+	else
+		run "hg clone ${ADDRESS} ${DIRECTORY}" || return 1
+		if [ ${BRANCH} != "default" ]; then
+			run "hg branch ${BRANCH}" || return 1
+		fi
+		echo -e "\n[extensions]\nhgext.purge=" >> ${DIRECTORY}/.hg/hgrc
+	fi
+	return 0
+}
+
+#-------------------------------------------------------------------------------
 # Synchronizes specified repository regardless its protocol
 # Parameters: %dest_directory% %protocol% %address% [%branch%]
 #-------------------------------------------------------------------------------
@@ -48,6 +72,9 @@ function pullRepository() {
 		case "${2}" in
 			[Gg][Ii][Tt])
 				pullGit "${1}" "${3}" "${4}" && return 0
+				;;
+			[Hh][Gg])
+				pullMercurial "${1}" "${3}" "${4}" && return 0
 				;;
 			[Rr][Ss][Yy][Nn][Cc])
 				pullRsync "${1}" "${3}" && return 0
