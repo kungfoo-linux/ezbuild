@@ -182,5 +182,10 @@ for OVERLAY in ${MERGED_PORTAGE[*]}; do
 	fi
 done
 
+# Regenerate Portage cache
+printInfo "Updating constructed Portage cache..."
+run "FEATURES="metadata-transfer" PORTDIR="${PORTAGESDIR}/${PORTAGE_BUILD[0]}" egencache --update --portdir=${PORTAGESDIR}/${PORTAGE_BUILD[0]} --jobs=${MAXJOBS} --tolerant"
+[ ${?} -ne 0 ] && die "EzBuild was unable to regenerate cache!"
+
 # Finally quit the application
 quit
