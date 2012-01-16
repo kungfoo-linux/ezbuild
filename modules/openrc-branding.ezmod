@@ -1,6 +1,6 @@
 # Copyright 2010-2012, Asio Software Technologies
 # Distributed under the terms of the GNU General Public License v3
-EZMOD_DESCRIPTION="Allows to re-brand the OpenRC package"
+EZMOD_DESCRIPTION="Allows to re-brand the sys-apps/openrc package"
 EZMOD_COMPATIBILITY="ezsync"
 EZMOD_AUTHOR="Rafal Kupiec"
 EZMOD_VERSION="1.0"

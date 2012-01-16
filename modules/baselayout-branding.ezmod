@@ -1,0 +1,14 @@
+# Copyright 2010-2012, Asio Software Technologies
+# Distributed under the terms of the GNU General Public License v3
+EZMOD_DESCRIPTION="Allows to re-brand the sys-apps/baselayout package"
+EZMOD_COMPATIBILITY="ezsync"
+EZMOD_AUTHOR="Rafal Kupiec"
+EZMOD_VERSION="1.0"
+
+ezsync_precommit() {
+	printInfo "Enabling custom BaseLayout branding..."
+	find ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/sys-apps/baselayout -type f -name \*.ebuild | while read EBUILD; do
+		sed -i "s/echo \"Gentoo Base System release/echo \"${CUSTOM_BRANDING}/g" ${EBUILD} || return 1
+	done
+	return 0
+}
