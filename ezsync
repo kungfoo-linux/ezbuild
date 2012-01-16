@@ -96,6 +96,18 @@ printInfo "Loading public keys..."
 eval `keychain --noask --eval id_dsa id_rsa &> /dev/null`
 [ ${?} -ne 0 ] && die "EzBuild was unable to load public keys!" 1
 
+# Execute all 'presync' enabled modules
+for MODULE in ${MODULES_PRESYNC}; do
+	loadModule ${MODULE} "presync"
+	RESULT=${?}
+	if [ ${RESULT} -eq 255 ]; then
+		printWarn "Trying to load module: ${MODULE}, that is incompatible with event: presync!"
+	elif [ ${RESULT} -ne 0 ]; then
+		fail "EzBuild was unable to execute module: ${MODULE}!"
+	fi
+	unloadModule
+done
+
 # Update local copy of Portage that is being built
 printInfo "Refreshing constructed Portage tree..."
 pullRepository ${PORTAGESDIR}/${PORTAGE_BUILD[0]} ${PORTAGE_BUILD[1]} ${PORTAGE_BUILD[2]} ${PORTAGE_BUILD[3]}
@@ -126,6 +138,18 @@ for OVERLAY in ${SYNC_OVERLAYS[*]}; do
 		pullRepository ${OVERLAYSDIR}/${CURRENT_OVERLAY[0]} ${CURRENT_OVERLAY[1]} ${CURRENT_OVERLAY[2]} ${CURRENT_OVERLAY[3]}
 		[ ${?} -ne 0 ] && fail "EzBuild was unable to refresh local copy of overlay: ${CURRENT_OVERLAY[0]}!" 4
 	fi
+done
+
+# Execute all 'postsync' enabled modules
+for MODULE in ${MODULES_POSTSYNC}; do
+	loadModule ${MODULE} "postsync"
+	RESULT=${?}
+	if [ ${RESULT} -eq 255 ]; then
+		printWarn "Trying to load module: ${MODULE}, that is incompatible with event: postsync!"
+	elif [ ${RESULT} -ne 0 ]; then
+		fail "EzBuild was unable to execute module: ${MODULE}!"
+	fi
+	unloadModule
 done
 
 # Optionally merge data into build overlay
