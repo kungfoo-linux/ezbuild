@@ -162,7 +162,7 @@ if isSet MERGED_OVERLAY && isSet OVERLAY_BUILD; then
 		[ ${?} -ne 0 ] && fail "EzBuild was unable to merge ebuilds into overlay!" 8
 	done
 	if ! isEnabled ${EZOPT_NOPUSH}; then
-		pushRepository ${OVERLAYSDIR}/${OVERLAY_BUILD[0]} ${OVERLAY_BUILD[1]} "Automatic overlay update [$(date +"${PUSHDATEFORMAT}")]."
+		pushRepository ${OVERLAYSDIR}/${OVERLAY_BUILD[0]} ${OVERLAY_BUILD[1]} "Automatic update [$(date +"${PUSHDATEFORMAT}")]."
 		[ ${?} -ne 0 ] && die "Ezbuild was unable to record changes to the remote overlay repository!" 8
 	fi
 fi
