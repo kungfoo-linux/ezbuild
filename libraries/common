@@ -370,6 +370,7 @@ function showEzsyncUsage() {
 	echo -e "USAGE: ezsync [parameters]"
 	echo -e "  -c\t--cleanlog\tclears log file; not working with -p and -P"
 	echo -e "  -h\t--help\t\tdisplays this screen and exits immediately"
+	echo -e "  -l\t--listmods\tshows the list of available built-in modules"
 	echo -e "  -n\t--nosync\tspecifies the ebuilds source that will be omitted"
 	echo -e "  -N\t--nopush\tavoids automatic commits into repositories"
 	echo -e "  -p\t--purge\t\tclears temporary folder"
