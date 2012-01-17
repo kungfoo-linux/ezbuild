@@ -4,6 +4,22 @@
 
 
 #-------------------------------------------------------------------------------
+# Applies a diff file to an original
+# Parameters: %original_dir% %patch%
+#-------------------------------------------------------------------------------
+function applyPatch() {
+	local DESTDIR="${1}"
+	local PATCH="${2}"
+	local PREFIX
+	for PREFIX in {0..4}; do
+		if run "patch -d ${DESTDIR} --dry-run -p ${PREFIX} -i ${PATCH} -s"; then
+			run "patch -d ${DESTDIR} -p ${PREFIX} -i ${PATCH}" && return 0
+		fi
+	done
+	return 1
+}
+
+#-------------------------------------------------------------------------------
 # Completely removes log file
 #-------------------------------------------------------------------------------
 function cleanLog() {
