@@ -1,0 +1,24 @@
+# Copyright 2010-2012, Asio Software Technologies
+# Distributed under the terms of the GNU General Public License v3
+EZMOD_DESCRIPTION="Synchronizes local Portage mirror"
+EZMOD_COMPATIBILITY="ezsync"
+EZMOD_AUTHOR="Rafal Kupiec"
+EZMOD_VERSION="1.0"
+
+ezsync_postcommit() {
+	if [ "${LOCALMIRROR_PATH}" != "" ]; then
+		printInfo "Synchronizing local Portage mirror..."
+		if [ "$(toUpper ${PORTAGE_BUILD[1]})" != "GIT" ]; then
+			printWarn "Local mirror actually supports only GIT!"
+			return 1
+		fi
+		if [ -d ${LOCALMIRROR_PATH} ]; then
+			cd ${LOCALMIRROR_PATH}
+			run "su ${LOCALMIRROR_USER} -s \"/bin/sh\" -c \"git fetch --all\"" || return 1
+		else
+			makeDirectory ${LOCALMIRROR_PATH}
+			run "su ${LOCALMIRROR_USER} -s \"/bin/sh\" -c \"git clone --mirror --bare ${PORTAGE_BUILD[2]} ${LOCALMIRROR_PATH}\"" || return 1
+		fi
+	fi
+	return 0
+}
