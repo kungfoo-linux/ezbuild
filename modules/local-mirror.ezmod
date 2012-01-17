@@ -6,18 +6,18 @@ EZMOD_AUTHOR="Rafal Kupiec"
 EZMOD_VERSION="1.0"
 
 ezsync_postcommit() {
-	if [ "${LOCALMIRROR_PATH}" != "" ]; then
+	if [ "${LOCALMIRRORPATH}" != "" ]; then
 		printInfo "Synchronizing local Portage mirror..."
 		if [ "$(toUpper ${PORTAGE_BUILD[1]})" != "GIT" ]; then
 			printWarn "Local mirror actually supports only GIT!"
 			return 0
 		fi
-		if [ -d ${LOCALMIRROR_PATH} ]; then
-			cd ${LOCALMIRROR_PATH}
-			run "su ${LOCALMIRROR_USER} -s \"/bin/sh\" -c \"git fetch --all\"" || return 1
+		if [ -d ${LOCALMIRRORPATH} ]; then
+			cd ${LOCALMIRRORPATH}
+			run "su ${LOCALMIRRORUSER} -s \"/bin/sh\" -c \"git fetch --all\"" || return 1
 		else
-			makeDirectory ${LOCALMIRROR_PATH}
-			run "su ${LOCALMIRROR_USER} -s \"/bin/sh\" -c \"git clone --mirror --bare ${PORTAGE_BUILD[2]} ${LOCALMIRROR_PATH}\"" || return 1
+			makeDirectory ${LOCALMIRRORPATH}
+			run "su ${LOCALMIRRORUSER} -s \"/bin/sh\" -c \"git clone --mirror --bare ${PORTAGE_BUILD[2]} ${LOCALMIRRORPATH}\"" || return 1
 		fi
 	fi
 	return 0

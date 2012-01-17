@@ -7,7 +7,7 @@ EZMOD_VERSION="1.1"
 
 ezsync_precommit() {
 	printInfo "Enabling compatibility options..."
-	run "rm -rf ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/metadata/cache" || return 1
+	rm -rf ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/metadata/cache
 	echo "cache-formats = md5-dict pms" >> ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/metadata/layout.conf
 	echo "profile-formats = portage-1" >> ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/metadata/layout.conf
 	return 0
