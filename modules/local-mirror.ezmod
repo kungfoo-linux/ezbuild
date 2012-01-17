@@ -10,7 +10,7 @@ ezsync_postcommit() {
 		printInfo "Synchronizing local Portage mirror..."
 		if [ "$(toUpper ${PORTAGE_BUILD[1]})" != "GIT" ]; then
 			printWarn "Local mirror actually supports only GIT!"
-			return 1
+			return 0
 		fi
 		if [ -d ${LOCALMIRROR_PATH} ]; then
 			cd ${LOCALMIRROR_PATH}
