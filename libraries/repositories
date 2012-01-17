@@ -6,7 +6,7 @@
 #-------------------------------------------------------------------------------
 # Prepares SSH Wrappers for use with unknown hosts (requires key authentication)
 #-------------------------------------------------------------------------------
-function prepareSshWrappers() {
+function prepareWrappers() {
 	run "cp ${EZROOT}/files/ssh_wrapper.sh ${BINDIR}/ssh_wrapper.sh" || return 1
 	run "chmod +x ${BINDIR}/ssh_wrapper.sh" || return 1
 	export GIT_SSH="${BINDIR}/ssh_wrapper.sh"
