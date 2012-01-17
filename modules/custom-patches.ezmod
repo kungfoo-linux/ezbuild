@@ -1,0 +1,24 @@
+# Copyright 2010-2012, Asio Software Technologies
+# Distributed under the terms of the GNU General Public License v3
+EZMOD_DESCRIPTION="Applies custom patches onto generated Portage tree"
+EZMOD_COMPATIBILITY="ezsync"
+EZMOD_AUTHOR="Rafal Kupiec"
+EZMOD_VERSION="1.0"
+
+ezsync_precommit() {
+	local PATCH PREFIX
+	if [ "${CUSTOM_PATCHES}" != "" ]; then
+		printInfo "Applying custom patches..."
+		for PATCH in ${CUSTOM_PATCHES}; do
+			for PREFIX in {0..4}; do
+				if run "patch -d \"${PORTAGESDIR}/${PORTAGE_BUILD[0]}\" --dry-run -p ${PREFIX} -i \"${PATCH}\" -s"; then
+					run "patch -d \"${PORTAGESDIR}/${PORTAGE_BUILD[0]}\" -p ${PREFIX} -i \"${PATCH}\"" || return 1
+				elif [ ${PREFIX} -ge 4 ]; then
+					printError "Patch ${PATCH} does not fit!"
+					return 1
+				fi
+			done
+		done
+	fi
+	return 0
+}
