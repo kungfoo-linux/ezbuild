@@ -88,7 +88,7 @@ fi
 # Initialize EzBuild environment
 makeCoreDirectories || die "EzBuild was unable to create all necessary directories!" 1
 EZNOTIFY="yes"
-makeSshWrapper || die "EzBuild was unable to create a wrapper file to SSH" 1
+prepareSshWrappers || die "EzBuild was unable to create a wrapper files to SSH" 1
 trap 'die "Process killed! This may lead into unexpected problems!"' 1 2 3 9 15 17 18 23
 
 # Load necessary public keys
