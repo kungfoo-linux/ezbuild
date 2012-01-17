@@ -102,8 +102,8 @@ function pullRsync() {
 		--partial --perms --recursive --safe-links --stats --times \
 		--timeout=${FETCHTIMEOUT} --whole-file --exclude=/.git --exclude=/.hg \
 		--exclude=/.svn --exclude=CVS --exclude=/distfiles --exclude=/local \
-		--exclude=/metadata/cache --exclude=/packages ${ADDRESS} \
-		${DIRECTORY}" || return 1
+		--exclude=/metadata/cache --exclude=/metadata/md5-cache \
+		--exclude=/packages ${ADDRESS} ${DIRECTORY}" || return 1
 	return 0
 }
 
