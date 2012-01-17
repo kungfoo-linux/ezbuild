@@ -9,6 +9,7 @@ ezsync_precommit() {
 	printInfo "Enabling custom OpenRC branding..."
 	find ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/sys-apps/openrc -type f -name \*.ebuild | while read EBUILD; do
 		sed -i "s/BRANDING=\"Gentoo \${brand}\"/BRANDING=\"${CUSTOM_BRANDING} \${brand}\"/g" ${EBUILD} || return 1
+		run "ebuild ${EBUILD} manifest" || return 1
 	done
 	return 0
 }

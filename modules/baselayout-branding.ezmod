@@ -9,6 +9,7 @@ ezsync_precommit() {
 	printInfo "Enabling custom BaseLayout branding..."
 	find ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/sys-apps/baselayout -type f -name \*.ebuild | while read EBUILD; do
 		sed -i "s/echo \"Gentoo Base System release/echo \"${CUSTOM_BRANDING}/g" ${EBUILD} || return 1
+		run "ebuild ${EBUILD} manifest" || return 1
 	done
 	return 0
 }
