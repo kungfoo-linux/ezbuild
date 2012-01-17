@@ -1,0 +1,35 @@
+# Copyright 2010-2012, Asio Software Technologies
+# Distributed under the terms of the GNU General Public License v3
+EZMOD_DESCRIPTION="Sends a notification about packages that need an update"
+EZMOD_COMPATIBILITY="ezsync"
+EZMOD_AUTHOR="Rafal Kupiec"
+EZMOD_VERSION="1.0"
+
+ezsync_postcommit() {
+	local BUILDVER MAINLINEVER NEEDSUPDATE NEWER PACKAGE
+	local SENDMESG=0
+	if [ "${UPDATE_NOTIFY}" != "" ]; then
+		for PACKAGE in ${MUSTCHECK[*]}; do
+			makeCleanDirectory ${TRASHDIR}/ebuilds
+			makeDirectory ${TRASHDIR}/ebuilds/build
+			makeDirectory ${TRASHDIR}/ebuilds/mainline
+			run "cp -apf ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/${PACKAGE}/*.ebuild ${TRASHDIR}/ebuilds/build/" || return 1
+			run "cp -apf ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/${PACKAGE}/*.ebuild ${TRASHDIR}/ebuilds/mainline/" || return 1
+			find ${TRASHDIR}/ebuilds -type f -name \*-9999\*.ebuild -exec rm -rf {} \;
+			BUILDVER=$(find ${TRASHDIR}/ebuilds/build -type f | sed -u -e "s/.ebuild//g" -e "s/-r/_z/g" -e "s/_p/_z/g" -e "s/_zre/_pre/" -e "s/$/_z0/" | sed "/^$/d" | sort -Vr | head -1)
+			BUILDVER=${BUILDVER##*/}
+			MAINLINEVER=$(find ${TRASHDIR}/ebuilds/mainline -type f | sed -u -e "s/.ebuild//g" -e "s/-r/_z/g" -e "s/_p/_z/g" -e "s/_zre/_pre/" -e "s/$/_z0/" | sed "/^$/d" | sort -Vr | head -1)
+			MAINLINEVER=${MAINLINEVER##*/}
+			NEWER=$(echo -e "${BUILDVER}\n${MAINLINEVER}" | sed "/^$/d" | sort -Vr | head -1)
+			if [[ "${NEWER}" != "${BUILDVER}" ]]; then
+				SENDMSG=1
+				NEEDSUPDATE=${NEEDSUPDATE+"$NEEDSUPDATE, "}"${PACKAGE}"
+			fi
+		done
+		rm -rf ${TRASHDIR}/ebuilds
+		if isEnabled ${SENDMSG}; then
+			echo "The following packages needs your attention, because they probably has been updated in mainline Portage tree: ${NEEDSUPDATE}" | mailx -s "Packages need an update!" ${UPDATE_NOTIFY}
+		fi
+	fi
+	return 0
+}
