@@ -10,15 +10,15 @@ ezsync_postcommit() {
 	local SENDMESG=0
 	if [ "${UPDATENOTIFY}" != "" ]; then
 		for PACKAGE in ${CHECKPACKAGES[*]}; do
-			makeCleanDirectory ${TRASHDIR}/ebuilds
-			makeDirectory ${TRASHDIR}/ebuilds/build
-			makeDirectory ${TRASHDIR}/ebuilds/mainline
-			run "cp -apf ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/${PACKAGE}/*.ebuild ${TRASHDIR}/ebuilds/build/" || return 1
-			run "cp -apf ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/${PACKAGE}/*.ebuild ${TRASHDIR}/ebuilds/mainline/" || return 1
-			find ${TRASHDIR}/ebuilds -type f -name \*-9999\*.ebuild -exec rm -rf {} \;
-			BUILDVER=$(find ${TRASHDIR}/ebuilds/build -type f | sed -u -e "s/.ebuild//g" -e "s/-r/_z/g" -e "s/_p/_z/g" -e "s/_zre/_pre/" -e "s/$/_z0/" | sed "/^$/d" | sort -Vr | head -1)
+			makeCleanDirectory ${TEMPDIR}/ebuilds
+			makeDirectory ${TEMPDIR}/ebuilds/build
+			makeDirectory ${TEMPDIR}/ebuilds/mainline
+			run "cp -apf ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/${PACKAGE}/*.ebuild ${TEMPDIR}/ebuilds/build/" || return 1
+			run "cp -apf ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/${PACKAGE}/*.ebuild ${TEMPDIR}/ebuilds/mainline/" || return 1
+			find ${TEMPDIR}/ebuilds -type f -name \*-9999\*.ebuild -exec rm -rf {} \;
+			BUILDVER=$(find ${TEMPDIR}/ebuilds/build -type f | sed -u -e "s/.ebuild//g" -e "s/-r/_z/g" -e "s/_p/_z/g" -e "s/_zre/_pre/" -e "s/$/_z0/" | sed "/^$/d" | sort -Vr | head -1)
 			BUILDVER=${BUILDVER##*/}
-			MAINLINEVER=$(find ${TRASHDIR}/ebuilds/mainline -type f | sed -u -e "s/.ebuild//g" -e "s/-r/_z/g" -e "s/_p/_z/g" -e "s/_zre/_pre/" -e "s/$/_z0/" | sed "/^$/d" | sort -Vr | head -1)
+			MAINLINEVER=$(find ${TEMPDIR}/ebuilds/mainline -type f | sed -u -e "s/.ebuild//g" -e "s/-r/_z/g" -e "s/_p/_z/g" -e "s/_zre/_pre/" -e "s/$/_z0/" | sed "/^$/d" | sort -Vr | head -1)
 			MAINLINEVER=${MAINLINEVER##*/}
 			NEWER=$(echo -e "${BUILDVER}\n${MAINLINEVER}" | sed "/^$/d" | sort -Vr | head -1)
 			if [[ "${NEWER}" != "${BUILDVER}" ]]; then
@@ -26,7 +26,7 @@ ezsync_postcommit() {
 				NEEDSUPDATE=${NEEDSUPDATE+"$NEEDSUPDATE, "}"${PACKAGE}"
 			fi
 		done
-		rm -rf ${TRASHDIR}/ebuilds
+		rm -rf ${TEMPDIR}/ebuilds
 		if isEnabled ${SENDMSG}; then
 			echo "The following packages needs your attention, because they probably has been updated in mainline Portage tree: ${NEEDSUPDATE}" | mailx -s "Packages need an update!" ${UPDATENOTIFY}
 		fi
