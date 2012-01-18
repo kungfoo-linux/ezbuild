@@ -137,7 +137,7 @@ function pushGit() {
 	run "git add ." || return 1
 	STATUS=$(git status --porcelain)
 	if [ "${STATUS}" != "" ]; then
-		run "git commit -a -m ${MESSAGE}" || return 1
+		run "git commit -a -m \"${MESSAGE}\"" || return 1
 		run "git push" || return 1
 	fi
 	return 0
@@ -156,7 +156,7 @@ function pushMercurial() {
 	run "hg add ." || return 1
 	STATUS=$(hg status)
 	if [ "${STATUS}" != "" ]; then
-		run "hg commit -A -m ${MESSAGE}" || return 1
+		run "hg commit -A -m \"${MESSAGE}\"" || return 1
 		run "hg push -e ${BINDIR}/ssh_wrapper.sh" || return 1
 	fi
 	return 0
