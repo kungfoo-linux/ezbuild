@@ -64,6 +64,26 @@ function download() {
 }
 
 #-------------------------------------------------------------------------------
+# Generates a hash file
+# Parameters: %digestfile% %filelist%
+#-------------------------------------------------------------------------------
+function generateDigests() {
+	if [ "${DIGESTS}" != "" ]; then
+		local OUTPUT="${1}"
+		shift
+		local FILELIST="${@}"
+		rm -f ${OUTPUT}
+		for FILE in ${FILELIST}; do
+			[ ! -f ${FILE} ] && return 1
+			for DIGEST in ${DIGESTS}; do
+				shash -a ${DIGEST} ${FILE} >> ${OUTPUT}
+			done
+		done
+	fi
+	return 0
+}
+
+#-------------------------------------------------------------------------------
 # Creates all 'core' directories necessary for EzBuild to operate
 #-------------------------------------------------------------------------------
 function makeCoreDirectories() {
