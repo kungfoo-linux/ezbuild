@@ -17,8 +17,65 @@ loadConfiguration
 
 # Print EzBuild notice and parse arguments
 printNotice
+until [[ -z "${1}" ]]; do
+	case "${1}" in
+		-c|--cleanlog)
+			EZOPT_CLEANLOG=true
+			;;
+		-h|--help)
+			showEzbuildUsage
+			;;
+		-l|--listmods)
+			listModules
+			;;
+		-p|--purge)
+			EZOPT_PURGETMP=true
+			;;
+		-P|--purgeonly)
+			EZOPT_PURGETMP=true
+			EZOPT_PURGEONLY=true
+			;;
+		-s|--syscheck)
+			EZOPT_SYSCHECKONLY=true
+			;;
+		*)
+			die "Unrecognized option ${1}"
+			;;
+	esac
+	shift
+done
 
 # Check system requirements
 printInfo "Checking system prerequisites..."
 checkPrerequisites
-[ ${?} -ne 0 ] && die "Your environment does not meet EzBuild requirements"
+[ ${?} -ne 0 ] && die "Your environment does not meet EzBuild requirements!" 1
+if isEnabled ${EZOPT_SYSCHECKONLY}; then
+	printInfo "Your system meets all EzBuild requirements!"
+	quit
+fi
+
+# Do not allow more than one working copy
+PID=$(pidof -s -o '%PPID' -x ${EZNAME})
+if [ ${PID} ]; then
+	printWarn "The ${EZNAME} is already working with PID: ${PID}"
+	printWarn "You cannot have more than one instancy running"
+	exit 0
+fi
+
+# Optionally purge whole temp directory or log file only
+if isEnabled ${EZOPT_PURGETMP}; then
+	printInfo "Clearing temp directory..."
+	cleanTemp
+	if isEnabled ${EZOPT_PURGEONLY}; then
+		quit
+	fi
+elif isEnabled ${EZOPT_CLEANLOG}; then
+	printInfo "Clearing log file..."
+	cleanLog
+fi
+
+# Initialize EzBuild environment
+makeCoreDirectories || die "EzBuild was unable to create all necessary directories!" 1
+EZNOTIFY="yes"
+export LC_ALL="C"
+trap 'die "Process killed! This may lead into unexpected problems!"' 1 2 3 9 15 17 18 23
