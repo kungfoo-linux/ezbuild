@@ -30,7 +30,7 @@ function cleanLog() {
 # Completely removes whole temp directory
 #-------------------------------------------------------------------------------
 function cleanTemp() {
-	rm -rf ${TEMPDIR} &> /dev/null
+	rm -rf ${STOREDIR} &> /dev/null
 }
 
 #-------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ function generateDigests() {
 #-------------------------------------------------------------------------------
 function makeCoreDirectories() {
 	local DIRS="${BINDIR} ${BUILDDIR} ${LOGFILE%/*} ${OVERLAYSDIR} \
-		${PACKAGESDIR} ${PORTAGESDIR} ${TEMPDIR} ${TRASHDIR}"
+		${PACKAGESDIR} ${PORTAGESDIR} ${STOREDIR} ${TRASHDIR}"
 	for DIR in ${DIRS}; do
 		makeDirectory ${DIR} || return 1
 	done
