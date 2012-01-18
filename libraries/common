@@ -368,7 +368,7 @@ function restoreIFS() {
 function run() {
 	local COMMAND OUTPUT RESULT
 	COMMAND="${@}"
-	logMessage "Executing: `${COMMAND}`" "DEBUG"
+	logMessage "Executing: \`${COMMAND}\`" "DEBUG"
 	OUTPUT=$(eval ${COMMAND} 2>&1)
 	RESULT=${?}
 	logOutput "${OUTPUT}"
