@@ -30,7 +30,7 @@ Requirements
 
  * app-arch/pbzip2 (multithreaded archiver)
  - app-cdr/cdrtools (ISO9660 support)
- - app-crypt/shash (digest support)
+ * app-crypt/shash (digest support)
  - app-misc/zisofs-tools (compressed ISO9660 support)
  * app-shells/bash (interpreting shell scripts)
  - dev-lang/python (interpreting python scripts)
