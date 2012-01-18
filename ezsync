@@ -202,6 +202,7 @@ run "FEATURES="metadata-transfer" PORTDIR="${PORTAGESDIR}/${PORTAGE_BUILD[0]}" e
 
 # Optionally commit all changes to remote Portage repository
 if ! isEnabled ${EZOPT_NOPUSH}; then
+	printInfo "Sending constructed Portage update..."
 	pushRepository ${PORTAGESDIR}/${PORTAGE_BUILD[0]} ${PORTAGE_BUILD[1]} "Automatic update [$(date +"${PUSHDATEFORMAT}")]."
 	[ ${?} -ne 0 ] && die "Ezbuild was unable to record changes to the remote Portage repository!" 64
 fi
