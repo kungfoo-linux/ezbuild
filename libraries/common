@@ -391,6 +391,23 @@ function saveIFS() {
 }
 
 #-------------------------------------------------------------------------------
+# Prints EzBuild usage information
+#-------------------------------------------------------------------------------
+function showEzbuildUsage() {
+	echo -e "EzBuild is release building metatool used by reGen2 developers for"
+	echo -e "building a custom Linux releases and templates.\n"
+	echo -e "USAGE: ezsync [parameters]"
+	echo -e "  -c\t--cleanlog\tclears log file; not working with -p and -P"
+	echo -e "  -h\t--help\t\tdisplays this screen and exits immediately"
+	echo -e "  -l\t--listmods\tshows the list of available built-in modules"
+	echo -e "  -p\t--purge\t\tclears temporary folder"
+	echo -e "  -P\t--purgeonly\tclears temporary folder and exits"
+	echo -e "  -s\t--syscheck\tperforms prerequisites check only"
+	echo -e "\n"
+	exit 0
+}
+
+#-------------------------------------------------------------------------------
 # Prints EzSync usage information
 #-------------------------------------------------------------------------------
 function showEzsyncUsage() {
