@@ -422,6 +422,7 @@ function showEzsyncUsage() {
 	echo -e "  -p\t--purge\t\tclears temporary folder"
 	echo -e "  -P\t--purgeonly\tclears temporary folder and exits"
 	echo -e "  -s\t--syscheck\tperforms prerequisites check only"
+	echo -e "  -t\t--notrigger\tdisables all build triggers and modules"
 	echo -e "\nEXAMPLES:"
 	echo -e "   ezsync -c -n mainline"
 	echo -e "   ezsync -n mainline -n my_repo1"

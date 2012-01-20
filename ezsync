@@ -49,6 +49,9 @@ until [[ -z "${1}" ]]; do
 		-s|--syscheck)
 			EZOPT_SYSCHECKONLY=true
 			;;
+		-t|--notrigger)
+			EZOPT_NOTRIGGER=true
+			;;
 		*)
 			die "Unrecognized option ${1}"
 			;;
@@ -98,16 +101,18 @@ eval `keychain --noask --eval id_dsa id_rsa &> /dev/null`
 [ ${?} -ne 0 ] && die "EzBuild was unable to load public keys!" 1
 
 # Execute all 'presync' enabled modules
-for MODULE in ${MODULES_PRESYNC}; do
-	loadModule ${MODULE} "presync"
-	RESULT=${?}
-	if [ ${RESULT} -eq 255 ]; then
-		printWarn "Trying to load module: ${MODULE}, that is incompatible with event: presync!"
-	elif [ ${RESULT} -ne 0 ]; then
-		fail "EzBuild was unable to execute module: ${MODULE}!" 255
-	fi
-	unloadModule
-done
+if ! isEnabled ${EZOPT_NOTRIGGER}; then
+	for MODULE in ${MODULES_PRESYNC}; do
+		loadModule ${MODULE} "presync"
+		RESULT=${?}
+		if [ ${RESULT} -eq 255 ]; then
+			printWarn "Trying to load module: ${MODULE}, that is incompatible with event: presync!"
+		elif [ ${RESULT} -ne 0 ]; then
+			fail "EzBuild was unable to execute module: ${MODULE}!" 255
+		fi
+		unloadModule
+	done
+fi
 
 # Update local copy of Portage that is being built
 printInfo "Refreshing constructed Portage tree..."
@@ -142,16 +147,18 @@ for OVERLAY in ${SYNC_OVERLAYS[*]}; do
 done
 
 # Execute all 'postsync' enabled modules
-for MODULE in ${MODULES_POSTSYNC}; do
-	loadModule ${MODULE} "postsync"
-	RESULT=${?}
-	if [ ${RESULT} -eq 255 ]; then
-		printWarn "Trying to load module: ${MODULE}, that is incompatible with event: postsync!"
-	elif [ ${RESULT} -ne 0 ]; then
-		fail "EzBuild was unable to execute module: ${MODULE}!" 255
-	fi
-	unloadModule
-done
+if ! isEnabled ${EZOPT_NOTRIGGER}; then
+	for MODULE in ${MODULES_POSTSYNC}; do
+		loadModule ${MODULE} "postsync"
+		RESULT=${?}
+		if [ ${RESULT} -eq 255 ]; then
+			printWarn "Trying to load module: ${MODULE}, that is incompatible with event: postsync!"
+		elif [ ${RESULT} -ne 0 ]; then
+			fail "EzBuild was unable to execute module: ${MODULE}!" 255
+		fi
+		unloadModule
+	done
+fi
 
 # Optionally merge data into build overlay
 if isSet MERGED_OVERLAY && isSet OVERLAY_BUILD; then
@@ -184,16 +191,18 @@ for OVERLAY in ${MERGED_PORTAGE[*]}; do
 done
 
 # Execute all 'precommit' enabled modules
-for MODULE in ${MODULES_PRECOMMIT}; do
-	loadModule ${MODULE} "precommit"
-	RESULT=${?}
-	if [ ${RESULT} -eq 255 ]; then
-		printWarn "Trying to load module: ${MODULE}, that is incompatible with event: precommit!"
-	elif [ ${RESULT} -ne 0 ]; then
-		fail "EzBuild was unable to execute module: ${MODULE}!" 255
-	fi
-	unloadModule
-done
+if ! isEnabled ${EZOPT_NOTRIGGER}; then
+	for MODULE in ${MODULES_PRECOMMIT}; do
+		loadModule ${MODULE} "precommit"
+		RESULT=${?}
+		if [ ${RESULT} -eq 255 ]; then
+			printWarn "Trying to load module: ${MODULE}, that is incompatible with event: precommit!"
+		elif [ ${RESULT} -ne 0 ]; then
+			fail "EzBuild was unable to execute module: ${MODULE}!" 255
+		fi
+		unloadModule
+	done
+fi
 
 # Regenerate Portage cache
 printInfo "Updating constructed Portage cache..."
@@ -208,16 +217,18 @@ if ! isEnabled ${EZOPT_NOPUSH}; then
 fi
 
 # Execute all 'postcommit' enabled modules
-for MODULE in ${MODULES_POSTCOMMIT}; do
-	loadModule ${MODULE} "postcommit"
-	RESULT=${?}
-	if [ ${RESULT} -eq 255 ]; then
-		printWarn "Trying to load module: ${MODULE}, that is incompatible with event: postcommit!"
-	elif [ ${RESULT} -ne 0 ]; then
-		fail "EzBuild was unable to execute module: ${MODULE}!" 255
-	fi
-	unloadModule
-done
+if ! isEnabled ${EZOPT_NOTRIGGER}; then
+	for MODULE in ${MODULES_POSTCOMMIT}; do
+		loadModule ${MODULE} "postcommit"
+		RESULT=${?}
+		if [ ${RESULT} -eq 255 ]; then
+			printWarn "Trying to load module: ${MODULE}, that is incompatible with event: postcommit!"
+		elif [ ${RESULT} -ne 0 ]; then
+			fail "EzBuild was unable to execute module: ${MODULE}!" 255
+		fi
+		unloadModule
+	done
+fi
 
 # Finally quit the application
 quit
