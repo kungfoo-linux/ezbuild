@@ -30,11 +30,28 @@ function mirrorRepository() {
 		[Gg][Ii][Tt])
 			mirrorGit "${1}" "${3}" "${4}" && return 0
 			;;
+		[Rr][Ss][Yy][Nn][Cc])
+			mirrorRsync "${1}" "${3}" "${4}" && return 0
+			;;
 		*)
 			printWarn "Tried to mirror data using unsupported protocol (${2})!"
 			;;
 	esac
 	return 1
+}
+
+#-------------------------------------------------------------------------------
+# Creates a local mirror of specified RSYNC repository
+# Parameters: %dest_directory% %address% [%username%]
+#-------------------------------------------------------------------------------
+function mirrorRsync() {
+	local DIRECTORY="${1}"
+	local ADDRESS="${2}"
+	local USER="${3:-root}"
+	run "su ${USER} -s \"/bin/sh\" -c \"rsync --compress --devices --delete \
+		--links --perms --recursive --stats --timeout=${FETCHTIMEOUT} --times \
+		${ADDRESS} ${DIRECTORY}\""
+	return ${?}
 }
 
 #-------------------------------------------------------------------------------
