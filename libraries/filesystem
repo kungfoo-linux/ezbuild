@@ -84,6 +84,16 @@ function generateDigests() {
 }
 
 #-------------------------------------------------------------------------------
+# Creates all components of the specified directories assuming thay are empty
+# Parameters: %directory%
+#-------------------------------------------------------------------------------
+function makeCleanDirectory() {
+	rm -rf "${@}"
+	makeDirectory "${@}"
+	return ${?}
+}
+
+#-------------------------------------------------------------------------------
 # Creates all 'core' directories necessary for EzBuild to operate
 #-------------------------------------------------------------------------------
 function makeCoreDirectories() {
@@ -93,16 +103,6 @@ function makeCoreDirectories() {
 		makeDirectory ${DIR} || return 1
 	done
 	return 0
-}
-
-#-------------------------------------------------------------------------------
-# Creates all components of the specified directories assuming thay are empty
-# Parameters: %directory%
-#-------------------------------------------------------------------------------
-function makeCleanDirectory() {
-	rm -rf "${@}"
-	makeDirectory "${@}"
-	return ${?}
 }
 
 #-------------------------------------------------------------------------------
