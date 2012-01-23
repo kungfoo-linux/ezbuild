@@ -91,6 +91,7 @@ if [ ${DISPATCH_STAGE} -eq 2 ]; then
 	dispatchProgress 3
 fi
 
+# Begin stage #3
 if [ ${DISPATCH_STAGE} -eq 3 ]; then
 	einfo "Dispatching system..."
 	emerge -1 --nodeps baselayout &> /dev/null || die "Unable to emerge baselayout!" 3
