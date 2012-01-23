@@ -64,6 +64,31 @@ function download() {
 }
 
 #-------------------------------------------------------------------------------
+# Generates a contents file
+# Parameters: %contentsfile% %archive%
+#-------------------------------------------------------------------------------
+function generateContents() {
+	local OUTPUT="${1}"
+	local ARCHIVE="${2}"
+	[ ! -f ${ARCHIVE} ] && return 1
+	case ${ARCHIVE} in
+		*.iso)
+			isoinfo -l -i ${ARCHIVE} > ${OUTPUT} || return 1
+			;;
+		*.tar)
+			tar -tvf ${ARCHIVE} > ${OUTPUT} || return 1
+			;;
+		*.tar.gz|*.tar.xz|*.tar.z)
+			tar -tvzf ${ARCHIVE} > ${OUTPUT} || return 1
+			;;
+		*.tar.bz2)
+			tar -tvjf ${ARCHIVE} > ${OUTPUT} || return 1
+			;;
+	esac
+	return 0
+}
+
+#-------------------------------------------------------------------------------
 # Generates a hash file
 # Parameters: %digestfile% %filelist%
 #-------------------------------------------------------------------------------
