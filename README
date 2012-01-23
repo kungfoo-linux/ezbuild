@@ -33,7 +33,6 @@ Requirements
  * app-crypt/shash (digest support)
  - app-misc/zisofs-tools (compressed ISO9660 support)
  * app-shells/bash (interpreting shell scripts)
- - dev-lang/python (interpreting python scripts)
  * dev-vcs/cvs (CVS repository support)
  * dev-vcs/git (GIT repository support)
  * dev-vcs/mercurial (HG repository support)
