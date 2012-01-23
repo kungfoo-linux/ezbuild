@@ -91,11 +91,17 @@ if [ ${DISPATCH_STAGE} -eq 2 ]; then
 	dispatchProgress 3
 fi
 
-# Begin stage #3
 if [ ${DISPATCH_STAGE} -eq 3 ]; then
+	einfo "Dispatching system..."
+	emerge -1 --nodeps baselayout &> /dev/null || die "Unable to emerge baselayout!" 3
+	emerge -1 --nodeps openrc &> /dev/null || die "Unable to emerge openrc!" 3
+	dispatchProgress 4
+fi
+
+# Begin stage #4
+if [ ${DISPATCH_STAGE} -eq 4 ]; then
 	einfo "Cleaning up..."
 	rm -rf /tmp/regen2-dispatch
 	einfo "All done!"
-	sleep 5
 	einfo "Enjoy reGen2!"
 fi
