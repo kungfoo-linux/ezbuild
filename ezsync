@@ -22,6 +22,14 @@ until [[ -z "${1}" ]]; do
 		-c|--cleanlog)
 			EZOPT_CLEANLOG=true
 			;;
+		-D|--tarballdate)
+			shift
+			if [ -z ${1} ]; then
+				die "--tarballdate requires an additional argument!"
+			else
+				TARBALLDATE="${1}"
+			fi
+			;;
 		-h|--help)
 			showEzsyncUsage
 			;;
