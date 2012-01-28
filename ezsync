@@ -133,6 +133,7 @@ if ! hasElement "mainline" ${EZNOSYNC} && ! hasElement "portage" ${EZNOSYNC}; th
 	pullRepository ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]} ${PORTAGE_MAINLINE[1]} ${PORTAGE_MAINLINE[2]} ${PORTAGE_MAINLINE[3]}
 	[ ${?} -ne 0 ] && die "EzBuild was unable to refresh local copy of mainline Portage tree!" 2
 	[ -e ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/metadata/cache ] && rm -rf ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/metadata/cache
+	[ -e ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/metadata/md5-cache ] && rm -rf ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/metadata/md5-cache
 	echo "distfiles/*" > ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/.gitignore
 	echo "packages/*" >> ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/.gitignore
 	if [ ! -d ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.mask ]; then
