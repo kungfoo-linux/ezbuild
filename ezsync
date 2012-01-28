@@ -140,6 +140,16 @@ if ! hasElement "mainline" ${EZNOSYNC} && ! hasElement "portage" ${EZNOSYNC}; th
 		makeDirectory ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.mask
 		mv ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.mask.bak ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.mask/${PORTAGE_MAINLINE[0]%-*} &> /dev/null
 	fi
+	if [ ! -d ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.unmask ]; then
+		mv ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.unmask ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.unmask.bak &> /dev/null
+		makeDirectory ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.unmask
+		mv ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.unmask.bak ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.unmask/${PORTAGE_MAINLINE[0]%-*} &> /dev/null
+	fi
+	if [ ! -d ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.use ]; then
+		mv ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.use ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.use.bak &> /dev/null
+		makeDirectory ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.use
+		mv ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.use.bak ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/profiles/package.use/${PORTAGE_MAINLINE[0]%-*} &> /dev/null
+	fi
 fi
 
 # Update all overlays (including the one that's optionally going to be built)
@@ -195,6 +205,14 @@ for OVERLAY in ${MERGED_PORTAGE[*]}; do
 	if [ -f ${OVERLAYSDIR}/${CURRENT_OVERLAY[0]}/profiles/package.mask ]; then
 		run "cp -apf ${OVERLAYSDIR}/${CURRENT_OVERLAY[0]}/profiles/package.mask ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/profiles/package.mask/${CURRENT_OVERLAY[0]%-*}"
 		[ ${?} -ne 0 ] && die "EzBuild was unable to merge package.mask file into Portage tree!" 16
+	fi
+	if [ -f ${OVERLAYSDIR}/${CURRENT_OVERLAY[0]}/profiles/package.unmask ]; then
+		run "cp -apf ${OVERLAYSDIR}/${CURRENT_OVERLAY[0]}/profiles/package.unmask ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/profiles/package.unmask/${CURRENT_OVERLAY[0]%-*}"
+		[ ${?} -ne 0 ] && die "EzBuild was unable to merge package.unmask file into Portage tree!" 16
+	fi
+	if [ -f ${OVERLAYSDIR}/${CURRENT_OVERLAY[0]}/profiles/package.use ]; then
+		run "cp -apf ${OVERLAYSDIR}/${CURRENT_OVERLAY[0]}/profiles/package.use ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/profiles/package.use/${CURRENT_OVERLAY[0]%-*}"
+		[ ${?} -ne 0 ] && die "EzBuild was unable to merge package.use file into Portage tree!" 16
 	fi
 done
 
