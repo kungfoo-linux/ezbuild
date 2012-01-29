@@ -196,7 +196,7 @@ fi
 
 # Merge data into build portage
 printInfo "Merging ebuilds into Portage..."
-pullRsync ${PORTAGESDIR}/${PORTAGE_BUILD[0]} ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}/
+pullRsync ${PORTAGESDIR}/${PORTAGE_BUILD[0]} ${PORTAGESDIR}/${PORTAGE_MAINLINE[0]}
 [ ${?} -ne 0 ] && die "EzBuild was unable to merge ebuilds into Portage tree!" 16
 for OVERLAY in ${MERGED_PORTAGE[*]}; do
 	TEMP="\${$OVERLAY[*]}"
