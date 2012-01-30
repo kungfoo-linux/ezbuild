@@ -46,6 +46,17 @@ until [[ -z "${1}" ]]; do
 		-s|--syscheck)
 			EZOPT_SYSCHECKONLY=true
 			;;
+		-t|--notrigger)
+			EZOPT_NOTRIGGER=true
+			;;
+		-T|--tarballformat)
+			shift
+			if [ -z ${1} ]; then
+				die "--tarballformat requires an additional argument!"
+			else
+				TARBALLFORMAT="${1}"
+			fi
+			;;
 		*)
 			die "Unrecognized option ${1}"
 			;;
