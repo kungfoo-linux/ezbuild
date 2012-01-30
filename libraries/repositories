@@ -77,6 +77,40 @@ function mirrorRsync() {
 }
 
 #-------------------------------------------------------------------------------
+# Downloads Portage tree ready for use at production using GIT protocol
+# Parameters: %dest_directory% %address%
+#-------------------------------------------------------------------------------
+function originGitPortage() {
+	local DST="${1}"
+	local SRC="${2}"
+	if [ -e ${DST} ]; then
+		return 1
+	fi
+	run "git clone --depth 1 ${SRC} ${DST}" || return 1
+	cd ${DST}
+	run "git config core.compression 0" || return 1
+	run "git gc --aggressive" || return 1
+	return 0
+}
+
+#-------------------------------------------------------------------------------
+# Downloads Portage tree ready for use at production using RSYNC protocol
+# Parameters: %dest_directory% %address%
+#-------------------------------------------------------------------------------
+function originRsyncPortage() {
+	local DST="${1}"
+	local SRC="${2}"
+	if [ -e ${DST} ]; then
+		return 1
+	fi
+	run "rsync --compress --delete --delete-after --devices --force --links \
+		--partial --perms --recursive --safe-links --stats --times \
+		--timeout=${FETCHTIMEOUT} --whole-file --exclude=/distfiles \
+		--exclude=/local --exclude=/packages ${SRC}/ ${DST}" || return 1
+	return 0
+}
+
+#-------------------------------------------------------------------------------
 # Prepares SSH Wrappers for use with unknown hosts (requires key authentication)
 #-------------------------------------------------------------------------------
 function prepareWrappers() {
