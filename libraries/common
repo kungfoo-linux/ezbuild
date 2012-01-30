@@ -425,6 +425,7 @@ function showEzsyncUsage() {
 	echo -e "  -P\t--purgeonly\tclears temporary folder and exits"
 	echo -e "  -s\t--syscheck\tperforms prerequisites check only"
 	echo -e "  -t\t--notrigger\tdisables all build triggers and modules"
+	echo -e "  -T\t--tarballformat\toverrides default compression algorithm"
 	echo -e "\nEXAMPLES:"
 	echo -e "   ezsync -c -n mainline"
 	echo -e "   ezsync -n mainline -n my_repo1"
