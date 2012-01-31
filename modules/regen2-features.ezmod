@@ -3,7 +3,7 @@
 EZMOD_DESCRIPTION="Enables reGen2 specific features in generated tree"
 EZMOD_COMPATIBILITY="ezsync"
 EZMOD_AUTHOR="Rafal Kupiec"
-EZMOD_VERSION="1.0"
+EZMOD_VERSION="1.2"
 
 ezsync_precommit() {
 	printInfo "Enabling compatibility options..."
