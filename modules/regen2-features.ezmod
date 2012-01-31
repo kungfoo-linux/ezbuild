@@ -6,6 +6,10 @@ EZMOD_AUTHOR="Rafal Kupiec"
 EZMOD_VERSION="1.0"
 
 ezsync_precommit() {
+	printInfo "Enabling compatibility options..."
+	rm -rf ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/metadata/cache
+	echo "cache-formats = md5-dict" >> ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/metadata/layout.conf
+	echo "profile-formats = portage-1" >> ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/metadata/layout.conf
 	run "cp ${EZROOT}/files/dispatch.sh ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/scripts/dispatch.sh" || return 1
 	run "chmod +x ${PORTAGESDIR}/${PORTAGE_BUILD[0]}/scripts/dispatch.sh" || return 1
 	return 0
