@@ -314,3 +314,56 @@ function pushRepository() {
 	esac
 	return 1
 }
+
+#-------------------------------------------------------------------------------
+# Downloads Portage tree ready t ouse at production and creates a snapshot
+# Parameters: %address% %protocol%
+#-------------------------------------------------------------------------------
+function snapshotPortage() {
+	local SOURCE="${1}"
+	local TARBALL="portage-$(date +${TARBALLDATE}).tar.${TARBALLFORMAT}"
+	if [ ! -d ${SNAPSHOTSDIR} ]; then
+		makeDirectory ${SNAPSHOTSDIR} || return 1
+	elif [ ! -f ${SNAPSHOTSDIR}/${TARBALL} ]; then
+		rm -rf "${TEMPDIR}/portage"
+		case ${2} in
+			[Gg][Ii][Tt])
+				originGitPortage ${TEMPDIR}/portage ${SOURCE} || return 1
+				;;
+			[Rr][Ss][Yy][Nn][Cc])
+				originRsyncPortage ${TEMPDIR}/portage ${SOURCE} || return 1
+				;;
+			*)
+				printWarn "Tried to pull data using unsupported protocol (${2})!"
+				return 1
+				;;
+		esac
+		TARBALL=${TARBALL%.*}
+		run "tar -c -C ${TEMPDIR} portage > ${SNAPSHOTSDIR}/${TARBALL}"
+		if [ ${?} -ne 0 ]; then
+			rm -f ${SNAPSHOTSDIR}/${TARBALL}
+			return 1
+		fi
+		case ${TARBALLFORMAT} in
+			bz2)
+				if [ -e /usr/bin/pbzip2 ]; then
+					run "pbzip2 -p${MAXJOBS} ${SNAPSHOTSDIR}/${TARBALL}"
+				else
+					run "bzip2 ${SNAPSHOTSDIR}/${TARBALL}"
+				fi
+				;;
+			gz)
+				run "gzip -9 ${SNAPSHOTSDIR}/${TARBALL}"
+				;;
+			xz)
+				run "xz ${SNAPSHOTSDIR}/${TARBALL}"
+				;;
+		esac
+		if [ ${?} -ne 0 ]; then
+			rm -f ${SNAPSHOTSDIR}/${TARBALL}
+			rm -f ${SNAPSHOTSDIR}/${TARBALL}.${TARBALLFORMAT}
+			return 1
+		fi
+	fi
+	return 0
+}
