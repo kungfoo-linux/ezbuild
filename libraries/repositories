@@ -321,10 +321,10 @@ function pushRepository() {
 #-------------------------------------------------------------------------------
 function snapshotPortage() {
 	local SOURCE="${1}"
-	local TARBALL="portage-$(date +${TARBALLDATE}).tar.${TARBALLFORMAT}"
+	local TARBALL="portage-$(date +${TARBALLDATE}).tar"
 	if [ ! -d ${SNAPSHOTSDIR} ]; then
 		makeDirectory ${SNAPSHOTSDIR} || return 1
-	elif [ ! -f ${SNAPSHOTSDIR}/${TARBALL} ]; then
+	elif [ ! -f ${SNAPSHOTSDIR}/${TARBALL}.${TARBALLFORMAT} ]; then
 		rm -rf "${TEMPDIR}/portage"
 		case ${2} in
 			[Gg][Ii][Tt])
@@ -338,7 +338,6 @@ function snapshotPortage() {
 				return 1
 				;;
 		esac
-		TARBALL=${TARBALL%.*}
 		run "tar -c -C ${TEMPDIR} portage > ${SNAPSHOTSDIR}/${TARBALL}"
 		if [ ${?} -ne 0 ]; then
 			rm -f ${SNAPSHOTSDIR}/${TARBALL}
@@ -365,6 +364,7 @@ function snapshotPortage() {
 			return 1
 		fi
 	fi
+	TARBALL="${TARBALL}.${TARBALLFORMAT}"
 	if [ ! -f ${SNAPSHOTSDIR}/${TARBALL}.DIGESTS ]; then
 		cd ${SNAPSHOTSDIR}
 		generateDigests ${TARBALL}.DIGESTS ${TARBALL} || return 1
