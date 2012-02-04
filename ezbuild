@@ -99,3 +99,8 @@ EZNOTIFY="yes"
 prepareWrappers || die "EzBuild was unable to create a wrapper files!" 1
 export LC_ALL="C"
 trap 'die "Process killed! This may lead into unexpected problems!"' 1 2 3 9 15 17 18 23
+
+# Load necessary public keys
+printInfo "Loading public keys..."
+eval `keychain --noask --eval id_dsa id_rsa &> /dev/null`
+[ ${?} -ne 0 ] && die "EzBuild was unable to load public keys!" 1
