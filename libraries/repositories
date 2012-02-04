@@ -365,5 +365,9 @@ function snapshotPortage() {
 			return 1
 		fi
 	fi
+	if [ ! -f ${SNAPSHOTSDIR}/${TARBALL}.DIGESTS ]; then
+		cd ${SNAPSHOTSDIR}
+		generateDigests ${TARBALL}.DIGESTS ${TARBALL} || return 1
+	fi
 	return 0
 }
