@@ -1,0 +1,28 @@
+# Copyright 2010-2012, Asio Software Technologies
+# Distributed under the terms of the GNU General Public License v3
+EZMOD_DESCRIPTION="Creates a Portage snapshot ready to use at production"
+EZMOD_COMPATIBILITY="ezsync"
+EZMOD_AUTHOR="Rafal Kupiec"
+EZMOD_VERSION="1.0"
+
+ezsync_postcommit() {
+	printInfo "Creating Portage tree snapshot..."
+	snapshotPortage ${PRODUCTION_PORTAGE[0]} ${PRODUCTION_PORTAGE[1]} || return 1
+	local SNAPSHOTS=$(find ${SNAPSHOTSDIR} -type f -name \*.xz | sort -r)
+	local n=0
+	for ARCHIVE in ${SNAPSHOTS}; do
+		if [[ ${n} < ${ARCHIVESTOKEEP} ]]; then
+			((n++))
+			continue
+		fi
+		rm -f ${ARCHIVE}
+		rm -f ${ARCHIVE}.*
+	done
+	if [ ${REMOTEDOWNLOAD} != "" ]; then
+		printInfo "Synchronizing remote download..."
+		run "rsync --archive --compress --copy-links --delete-after \
+			--safe-links --verbose --rsh=\"${BINDIR}/ssh_wrapper.sh\" \
+			\"${SNAPSHOTSDIR}/\" \"${REMOTEDOWNLOAD}/snapshots\"" || return 1
+	fi
+	return 0
+}
