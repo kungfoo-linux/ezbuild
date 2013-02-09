@@ -11,10 +11,6 @@ function checkPrerequisites() {
 		printError "You are trying to launch ${EZNAME} on non-Linux system!"
 		return 1
 	fi
-	if [ "${EUID}" != "0" ] && [ "${USER}" != "root" ]; then
-		printError "The ${EZNAME} needs to be launched from root account!"
-		return 1
-	fi
 	if [ ! -e /dev/null ]; then
 		printError "The /dev directory seems to be not mounted!"
 		return 1
@@ -174,9 +170,9 @@ function loadConfiguration() {
 	source ${EZROOT}/config/common.conf &> /dev/null || panic
 	source ${EZROOT}/config/${EZNAME}.conf &> /dev/null || panic
 	source ${EZROOT}/config/layout.conf &> /dev/null || panic
-	source /etc/ezbuild/common.conf &> /dev/null || panic
-	source /etc/ezbuild/${EZNAME}.conf &> /dev/null || panic
-	source /etc/ezbuild/layout.conf &> /dev/null || panic
+	source ~/.ezbuild/common.conf &> /dev/null || panic
+	source ~/.ezbuild/${EZNAME}.conf &> /dev/null || panic
+	source ~/.ezbuild/layout.conf &> /dev/null || panic
 }
 
 #-------------------------------------------------------------------------------
@@ -204,9 +200,9 @@ function loadModule() {
 		if [ -e ${MODULESCUSTOMDIR}/${MODULE}.conf ]; then
 			source ${EZROOT}/config/modules/${MODULE}.conf &> /dev/null
 			source ${MODULESCUSTOMDIR}/${MODULE}.conf &> /dev/null
-		elif [ -e /etc/ezbuild/modules/${MODULE}.conf ]; then
+		elif [ -e ~/.ezbuild/modules/${MODULE}.conf ]; then
 			source ${EZROOT}/config/modules/${MODULE}.conf &> /dev/null
-			source /etc/ezbuild/modules/${MODULE}.conf &> /dev/null
+			source ~/.ezbuild/modules/${MODULE}.conf &> /dev/null
 		fi
 		if [ ${?} -eq 0 ]; then
 			if functionExists ${FUNCTION}; then

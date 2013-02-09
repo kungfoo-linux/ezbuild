@@ -122,8 +122,8 @@ function makeCleanDirectory() {
 # Creates all 'core' directories necessary for EzBuild to operate
 #-------------------------------------------------------------------------------
 function makeCoreDirectories() {
-	local DIRS="${BINDIR} ${BUILDDIR} ${LOGFILE%/*} ${OVERLAYSDIR} \
-		${PACKAGESDIR} ${PORTAGESDIR} ${STOREDIR} ${TEMPDIR}"
+	local DIRS="${BINDIR} ${BUILDDIR} ${ECACHEDIR} ${LOGFILE%/*} \
+		${OVERLAYSDIR} ${PACKAGESDIR} ${PORTAGESDIR} ${STOREDIR} ${TEMPDIR}"
 	for DIR in ${DIRS}; do
 		makeDirectory ${DIR} || return 1
 	done
